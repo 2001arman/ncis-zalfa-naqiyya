@@ -9,8 +9,8 @@ export default async function ArtikelPage() {
   const posts = await prisma.post.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' }, take: 6 }).catch(() => [])
 
   const fallback = [
-    {id:'1',slug:'#',title:'Mengenali Tanda Kecemasan pada Anak Usia Dini',excerpt:'Kecemasan pada anak tidak selalu terlihat seperti pada orang dewasa. Memahami gejala fisik dan perilaku yang tidak biasa sangat penting untuk intervensi dini yang tepat.',coverImage:'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',createdAt:new Date('2024-10-12')},
-    {id:'2',slug:'#',title:'Membangun Komunikasi Positif dalam Keluarga',excerpt:'Komunikasi yang efektif adalah kunci dari keharmonisan keluarga. Pelajari strategi praktis untuk mendengarkan aktif dan berbicara dengan empati.',coverImage:'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg',createdAt:new Date('2024-10-05')},
+    {id:'1',slug:'dummy-1',title:'Mengenali Tanda Kecemasan pada Anak Usia Dini',excerpt:'Kecemasan pada anak tidak selalu terlihat seperti pada orang dewasa. Memahami gejala fisik dan perilaku yang tidak biasa sangat penting untuk intervensi dini yang tepat.',coverImage:'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',createdAt:new Date('2024-10-12')},
+    {id:'2',slug:'dummy-2',title:'Membangun Komunikasi Positif dalam Keluarga',excerpt:'Komunikasi yang efektif adalah kunci dari keharmonisan keluarga. Pelajari strategi praktis untuk mendengarkan aktif dan berbicara dengan empati.',coverImage:'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg',createdAt:new Date('2024-10-05')},
   ]
 
   const items = posts.length > 0 ? posts : fallback
@@ -29,7 +29,7 @@ export default async function ArtikelPage() {
       <main className="pb-24 px-6 md:px-16 max-w-[1280px] mx-auto">
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {items.map((p) => (
-            <article key={p.id} className="bg-white rounded-[24px] overflow-hidden border border-[#7ab8a0]/20 shadow-[0_20px_40px_-15px_rgba(43,105,85,0.08)] hover:shadow-[0_30px_50px_-15px_rgba(43,105,85,0.12)] transition-all duration-300 hover:-translate-y-1 group">
+            <Link href={`/artikel/${p.slug}`} key={p.id} className="block bg-white rounded-[24px] overflow-hidden border border-[#7ab8a0]/20 shadow-[0_20px_40px_-15px_rgba(43,105,85,0.08)] hover:shadow-[0_30px_50px_-15px_rgba(43,105,85,0.12)] transition-all duration-300 hover:-translate-y-1 group">
               <div className="p-6">
                 {p.coverImage && <img alt={p.title} className="w-full h-64 object-cover rounded-2xl mb-6" src={p.coverImage}/>}
                 <span className="inline-block bg-[#F2D086]/20 text-[#8c6b24] px-4 py-1.5 rounded-full font-semibold text-xs mb-4">
@@ -37,11 +37,11 @@ export default async function ArtikelPage() {
                 </span>
                 <h2 className="text-xl font-semibold text-[#2b6955] mb-3 group-hover:text-[#7ab8a0] transition-colors" style={{fontFamily:'Plus Jakarta Sans'}}>{p.title}</h2>
                 {p.excerpt && <p className="text-[#404944] mb-6 line-clamp-3">{p.excerpt}</p>}
-                <Link href={`/artikel/${p.slug}`} className="text-[#F26D85] font-semibold text-sm flex items-center gap-2 hover:gap-3 transition-all">
+                <div className="text-[#F26D85] font-semibold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
                   Baca Selengkapnya <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                </Link>
+                </div>
               </div>
-            </article>
+            </Link>
           ))}
         </section>
 

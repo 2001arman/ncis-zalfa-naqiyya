@@ -6,13 +6,16 @@
  */
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import { Pool } from 'pg'
+import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import bcrypt from 'bcrypt'
 
 // Prisma v7 requires a driver adapter
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-const adapter = new PrismaPg(pool)
+const connectionString = process.env.DATABASE_URL
+if (!connectionString) {
+  throw new Error('DATABASE_URL environment variable is not set')
+}
+
+const adapter = new PrismaMariaDb(connectionString)
 const prisma = new PrismaClient({ adapter })
 
 async function main() {

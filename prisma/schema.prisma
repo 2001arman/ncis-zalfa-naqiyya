@@ -3,13 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
 model Admin {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String   // Hashed via bcrypt
+  password  String // Hashed via bcrypt
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -17,17 +17,17 @@ model Admin {
 }
 
 model Post {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  excerpt     String?
-  content     String  // Tiptap HTML content
-  coverImage  String?  // Cloudinary URL
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  authorId    String
-  author      Admin    @relation(fields: [authorId], references: [id])
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  title      String
+  excerpt    String?
+  content    String   @db.Text // Tiptap HTML content
+  coverImage String? // Cloudinary URL
+  published  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  authorId   String
+  author     Admin    @relation(fields: [authorId], references: [id])
 }
 
 model Consultation {
@@ -35,7 +35,7 @@ model Consultation {
   name      String
   phone     String
   service   String
-  message   String?
+  message   String?  @db.Text
   status    String   @default("NEW") // NEW, CONTACTED, RESOLVED
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

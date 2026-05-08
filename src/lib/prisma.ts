@@ -1,12 +1,11 @@
 /**
- * Prisma v7 client singleton using @prisma/adapter-pg.
+ * Prisma v7 client singleton using @prisma/adapter-mariadb.
  *
  * Prisma v7 requires a driver adapter instead of the classic engine.
- * We use @prisma/adapter-pg with a pg.Pool for direct PostgreSQL connections.
+ * The MariaDB adapter supports both MariaDB and MySQL databases.
  */
 import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import { Pool } from 'pg'
+import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 
 function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL
@@ -14,8 +13,7 @@ function createPrismaClient() {
     throw new Error('DATABASE_URL environment variable is not set')
   }
 
-  const pool = new Pool({ connectionString })
-  const adapter = new PrismaPg(pool)
+  const adapter = new PrismaMariaDb(connectionString)
   return new PrismaClient({ adapter })
 }
 

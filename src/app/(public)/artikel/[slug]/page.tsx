@@ -81,12 +81,12 @@ export default async function ArtikelDetailPage({ params }: Props) {
     <div className="bg-[#f8faf6] text-[#191c1b] min-h-screen">
       <main className="flex-grow w-full max-w-[1280px] mx-auto px-6 md:px-16 py-12">
         {/* Breadcrumb */}
-        <nav className="mb-8 flex items-center gap-2 text-[12px] text-[#707974]" style={{ fontFamily: 'Inter' }}>
-          <Link className="hover:text-[#2b6955] transition-colors" href="/">Beranda</Link>
-          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <Link className="hover:text-[#2b6955] transition-colors" href="/artikel">Artikel</Link>
-          <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-          <span className="text-[#191c1b]">{post.title}</span>
+        <nav className="mb-8 flex items-center gap-1 md:gap-2 text-[12px] text-[#707974] overflow-hidden" style={{ fontFamily: 'Inter' }}>
+          <Link className="hover:text-[#2b6955] transition-colors shrink-0" href="/">Beranda</Link>
+          <span className="material-symbols-outlined text-[16px] shrink-0">chevron_right</span>
+          <Link className="hover:text-[#2b6955] transition-colors shrink-0" href="/artikel">Artikel</Link>
+          <span className="material-symbols-outlined text-[16px] shrink-0">chevron_right</span>
+          <span className="text-[#191c1b] truncate">{post.title}</span>
         </nav>
 
         {/* Article Header */}

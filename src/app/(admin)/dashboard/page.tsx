@@ -64,8 +64,8 @@ export default async function DashboardPage() {
       {/* Recent consultations */}
       <div>
         <h2 className="font-heading font-semibold text-lg text-text mb-4">Konsultasi Terbaru</h2>
-        <div className="bg-white rounded-scrapbook shadow-ambient overflow-hidden">
-          <table className="w-full text-sm font-body">
+        <div className="bg-white rounded-scrapbook shadow-ambient overflow-x-auto">
+          <table className="w-full text-sm font-body min-w-[480px]">
             <thead>
               <tr className="border-b border-surface-dim bg-surface-container">
                 <th className="px-5 py-3 text-left text-xs font-semibold text-text-muted uppercase tracking-wider">Nama</th>

@@ -50,6 +50,13 @@
 :root {
   --background: var(--color-surface);
   --foreground: var(--color-text);
+  --spacing-section: 48px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --spacing-section: 80px;
+  }
 }
 
 body {

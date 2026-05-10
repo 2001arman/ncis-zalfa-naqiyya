@@ -12,16 +12,16 @@ export default async function HomePage() {
     <div className="bg-[#FDF8F0] text-[#1d1c17] overflow-x-hidden">
 
       {/* HERO */}
-      <section className="relative min-h-[870px] flex items-center justify-center pt-12 pb-20 px-6 overflow-hidden bg-[#FDF8F0]">
-        <div className="absolute top-20 left-10 opacity-40 -rotate-12 pointer-events-none">
-          <span className="material-symbols-outlined text-6xl text-[#fc758d]">favorite</span>
+      <section className="relative flex items-center justify-center pt-10 pb-16 md:pt-12 md:pb-20 px-5 md:px-6 overflow-hidden bg-[#FDF8F0]">
+        <div className="absolute top-20 left-10 opacity-40 -rotate-12 pointer-events-none hidden sm:block">
+          <span className="material-symbols-outlined text-5xl md:text-6xl text-[#fc758d]">favorite</span>
         </div>
-        <div className="absolute bottom-20 right-20 opacity-30 rotate-12 pointer-events-none">
-          <span className="material-symbols-outlined text-8xl text-[#7fd5d4]">star</span>
+        <div className="absolute bottom-20 right-10 md:right-20 opacity-30 rotate-12 pointer-events-none hidden sm:block">
+          <span className="material-symbols-outlined text-6xl md:text-8xl text-[#7fd5d4]">star</span>
         </div>
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-          <div className="space-y-6 max-w-xl">
-            <h1 className="text-5xl font-bold text-[#006a6a] relative leading-tight" style={{ fontFamily: 'Plus Jakarta Sans' }}>
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center relative z-10">
+          <div className="space-y-5 md:space-y-6 max-w-xl">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#006a6a] relative leading-tight" style={{ fontFamily: 'Plus Jakarta Sans' }}>
               Ruang Tumbuh yang{' '}
               <span className="relative inline-block">
                 Aman
@@ -31,31 +31,31 @@ export default async function HomePage() {
               </span>{' '}
               dan Bermakna
             </h1>
-            <p className="text-lg text-[#3e4948] leading-relaxed">
+            <p className="text-base md:text-lg text-[#3e4948] leading-relaxed">
               Pusat psikologi yang berdedikasi menciptakan lingkungan nyaman bagi anak, remaja, dan keluarga untuk berkembang secara optimal melalui pendekatan holistik dan suportif.
             </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <a href="https://wa.me/" className="bg-[#006a6a] text-white px-8 py-3.5 rounded-[24px] text-sm font-semibold hover:-translate-y-0.5 transition-transform shadow-lg flex items-center gap-2" style={{ fontFamily: 'Inter' }}>
+            <div className="flex flex-wrap gap-3 md:gap-4 pt-2 md:pt-4">
+              <a href="https://wa.me/" className="bg-[#006a6a] text-white px-6 md:px-8 py-3 md:py-3.5 rounded-[24px] text-sm font-semibold hover:-translate-y-0.5 transition-transform shadow-lg flex items-center gap-2" style={{ fontFamily: 'Inter' }}>
                 <span className="material-symbols-outlined fill-icon">forum</span>WhatsApp
               </a>
-              <Link href="/#kontak" className="border-2 border-[#006a6a] text-[#006a6a] px-8 py-3.5 rounded-[24px] text-sm font-semibold hover:bg-[#f8f3eb] transition-colors flex items-center gap-2">
+              <Link href="/#kontak" className="border-2 border-[#006a6a] text-[#006a6a] px-6 md:px-8 py-3 md:py-3.5 rounded-[24px] text-sm font-semibold hover:bg-[#f8f3eb] transition-colors flex items-center gap-2">
                 <span className="material-symbols-outlined">edit_calendar</span>Daftar
               </Link>
             </div>
           </div>
-          <div className="relative h-[500px] w-full rounded-[48px] overflow-hidden shadow-xl rotate-2 hover:rotate-0 transition-transform duration-500 bg-[#f2ede5]">
+          <div className="relative h-[280px] sm:h-[380px] lg:h-[500px] w-full rounded-[32px] md:rounded-[48px] overflow-hidden shadow-xl rotate-2 hover:rotate-0 transition-transform duration-500 bg-[#f2ede5]">
             <img alt="Parent and child" className="w-full h-full object-cover" src="https://images.pexels.com/photos/8537196/pexels-photo-8537196.jpeg" />
           </div>
         </div>
       </section>
 
       {/* VALUES */}
-      <section className="py-20 px-6 bg-[#fef9f1]">
-        <div className="max-w-[1200px] mx-auto text-center space-y-16">
-          <h2 className="text-3xl font-bold text-[#a7344d] inline-block relative" style={{ fontFamily: 'Plus Jakarta Sans' }}>
+      <section className="py-12 md:py-20 px-5 md:px-6 bg-[#fef9f1]">
+        <div className="max-w-[1200px] mx-auto text-center space-y-10 md:space-y-16">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#a7344d] inline-block relative" style={{ fontFamily: 'Plus Jakarta Sans' }}>
             Nilai-Nilai Kami
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {[
               { num: '01', bg: '#B2C9B2', icon: 'psychiatry', title: 'Growth', desc: 'Bertumbuh dalam proses', tc: '#004f50' },
               { num: '02', bg: '#F8D4D4', icon: 'favorite', title: 'Empathy', desc: 'Pendekatan penuh empati', tc: '#871b37', mt: true },
@@ -77,8 +77,8 @@ export default async function HomePage() {
       </section>
 
       {/* ABOUT */}
-      <section id="tentang" className="py-20 px-6 bg-white relative overflow-hidden">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section id="tentang" className="py-12 md:py-20 px-5 md:px-6 bg-white relative overflow-hidden">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
           <div className="relative h-[400px] w-full rounded-[40px] overflow-hidden shadow-xl -rotate-2">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
               <div className="w-16 h-8 bg-[#e7e2da] rounded-full border-4 border-white shadow-sm" />
@@ -98,10 +98,10 @@ export default async function HomePage() {
       </section>
 
       {/* SERVICES */}
-      <section className="py-20 px-6 bg-[#fef9f1]">
+      <section className="py-12 md:py-20 px-5 md:px-6 bg-[#fef9f1]">
         <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-[#a7344d] inline-block relative" style={{ fontFamily: 'Plus Jakarta Sans' }}>
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#a7344d] inline-block relative" style={{ fontFamily: 'Plus Jakarta Sans' }}>
               Layanan Kami
               <svg className="absolute -bottom-3 left-0 w-full h-4 text-[#bc99be] opacity-50 z-[-1]" preserveAspectRatio="none" viewBox="0 0 100 20"><path d="M0 10 Q 25 0 50 10 T 100 10" fill="none" stroke="currentColor" strokeWidth="6" /></svg>
             </h2>
@@ -131,20 +131,20 @@ export default async function HomePage() {
       </section>
 
       {/* PROGRAM HIGHLIGHT */}
-      <section className="py-20 px-6 bg-[#F2D086] relative">
+      <section className="py-12 md:py-20 px-5 md:px-6 bg-[#F2D086] relative">
         <div className="max-w-[1200px] mx-auto">
-          <div className="text-center space-y-4 mb-16">
+          <div className="text-center space-y-3 md:space-y-4 mb-10 md:mb-16">
             <div className="inline-block px-4 py-2 bg-white/40 rounded-full text-sm font-semibold text-[#1d1c17]">Program Unggulan</div>
-            <h2 className="text-3xl font-bold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Kids Growth Program</h2>
-            <p className="text-lg text-[#3e4948] max-w-2xl mx-auto">Dirancang khusus dengan pendekatan fun &amp; meaningful untuk anak usia 3-12 tahun.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Kids Growth Program</h2>
+            <p className="text-base md:text-lg text-[#3e4948] max-w-2xl mx-auto">Dirancang khusus dengan pendekatan fun &amp; meaningful untuk anak usia 3-12 tahun.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8">
             {[
-              { color: '#006a6a', icon: 'toys', title: 'Aktivitas', tc: 'text-[#006a6a]', items: ['Sensori Integrasi Dasar', 'Brain Gym Ringan', 'Art & Play Therapy'], mt: 'md:mt-12' },
-              { color: '#a7344d', icon: 'psychology', title: 'Manfaat', tc: 'text-[#a7344d]', items: ['Regulasi Emosi Lebih Baik', 'Peningkatan Fokus', 'Percaya Diri Meningkat'], mt: 'md:-mt-4' },
-              { color: '#725475', icon: 'flag', title: 'Tujuan', tc: 'text-[#725475]', items: ['Kemandirian Anak', 'Kesiapan Sekolah', 'Bonding Keluarga'], mt: 'md:mt-12' },
+              { color: '#006a6a', icon: 'toys', title: 'Aktivitas', tc: 'text-[#006a6a]', items: ['Sensori Integrasi Dasar', 'Brain Gym Ringan', 'Art & Play Therapy'], mt: 'sm:mt-12' },
+              { color: '#a7344d', icon: 'psychology', title: 'Manfaat', tc: 'text-[#a7344d]', items: ['Regulasi Emosi Lebih Baik', 'Peningkatan Fokus', 'Percaya Diri Meningkat'], mt: 'sm:-mt-4' },
+              { color: '#725475', icon: 'flag', title: 'Tujuan', tc: 'text-[#725475]', items: ['Kemandirian Anak', 'Kesiapan Sekolah', 'Bonding Keluarga'], mt: 'sm:mt-12' },
             ].map(c => (
-              <div key={c.title} className={`bg-white/80 backdrop-blur-md p-8 rounded-[32px] shadow-md relative ${c.mt}`}>
+              <div key={c.title} className={`bg-white/80 backdrop-blur-md p-6 md:p-8 rounded-[32px] shadow-md relative ${c.mt}`}>
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center shadow-lg border-4 border-[#F2D086]" style={{ backgroundColor: c.color }}>
                   <span className="material-symbols-outlined text-white text-xl">{c.icon}</span>
                 </div>
@@ -155,8 +155,8 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
-          <div className="text-center mt-12">
-            <Link href="/#kontak" className="bg-[#006a6a] text-white px-8 py-4 rounded-[24px] text-xl font-semibold hover:bg-[#004f50] transition-colors shadow-lg inline-flex items-center gap-2" style={{ fontFamily: 'Plus Jakarta Sans' }}>
+          <div className="text-center mt-10 md:mt-12">
+            <Link href="/#kontak" className="bg-[#006a6a] text-white px-6 md:px-8 py-3 md:py-4 rounded-[24px] text-base md:text-xl font-semibold hover:bg-[#004f50] transition-colors shadow-lg inline-flex items-center gap-2" style={{ fontFamily: 'Plus Jakarta Sans' }}>
               Jadwalkan Sesi Kids Growth <span className="material-symbols-outlined">arrow_forward</span>
             </Link>
           </div>
@@ -164,11 +164,11 @@ export default async function HomePage() {
       </section>
 
       {/* ARTICLES */}
-      <section className="py-20 px-6 bg-[#fef9f1]">
+      <section className="py-12 md:py-20 px-5 md:px-6 bg-[#fef9f1]">
         <div className="max-w-[1200px] mx-auto">
-          <div className="flex justify-between items-end mb-12">
-            <h2 className="text-3xl font-bold text-[#006a6a]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Artikel &amp; Jurnal</h2>
-            <Link href="/artikel" className="hidden md:flex items-center gap-1 text-sm font-semibold text-[#006a6a] hover:text-[#004f50]">
+          <div className="flex justify-between items-end mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#006a6a]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Artikel &amp; Jurnal</h2>
+            <Link href="/artikel" className="flex items-center gap-1 text-xs md:text-sm font-semibold text-[#006a6a] hover:text-[#004f50]">
               Lihat Semua <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </Link>
           </div>
@@ -207,14 +207,14 @@ export default async function HomePage() {
       </section>
 
       {/* CONTACT / REGISTRATION */}
-      <section id="kontak" className="py-20 px-6 bg-[#B2C9B2]/20 relative overflow-hidden">
-        <div className="max-w-[1200px] mx-auto mt-12">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-            <div className="lg:col-span-3 bg-white p-8 md:p-12 rounded-[40px] shadow-md relative">
+      <section id="kontak" className="py-12 md:py-20 px-5 md:px-6 bg-[#B2C9B2]/20 relative overflow-hidden">
+        <div className="max-w-[1200px] mx-auto mt-6 md:mt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12">
+            <div className="lg:col-span-3 bg-white p-6 md:p-12 rounded-[32px] md:rounded-[40px] shadow-md relative">
               <div className="absolute top-8 right-8 opacity-20 pointer-events-none">
                 <span className="material-symbols-outlined text-5xl text-[#006a6a]">edit_document</span>
               </div>
-              <h2 className="text-3xl font-bold text-[#006a6a] mb-8" style={{ fontFamily: 'Plus Jakarta Sans' }}>Daftar Sesi Konsultasi</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#006a6a] mb-6 md:mb-8" style={{ fontFamily: 'Plus Jakarta Sans' }}>Daftar Sesi Konsultasi</h2>
               <ConsultationForm />
             </div>
             <div className="lg:col-span-2 space-y-8">
@@ -246,11 +246,11 @@ export default async function HomePage() {
       </section>
 
       {/* FLOATING WA */}
-      <a href="https://wa.me/" className="fixed bottom-8 right-8 z-50 group flex items-center">
+      <a href="https://wa.me/" className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 group flex items-center">
         <div className="absolute right-full mr-4 bg-white px-4 py-2 rounded-full shadow-lg text-[#006a6a] text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           Konsultasi via WhatsApp
         </div>
-        <div className="w-16 h-16 bg-[#25D366] rounded-full text-white flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] relative hover:scale-110 transition-transform duration-300">
+        <div className="w-13 h-13 md:w-16 md:h-16 bg-[#25D366] rounded-full text-white flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] relative hover:scale-110 transition-transform duration-300">
           <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-40" />
           <svg className="w-8 h-8 fill-current relative z-10"
             width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">

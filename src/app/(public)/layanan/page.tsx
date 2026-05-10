@@ -8,26 +8,28 @@ export default function LayananPage() {
     <div className="bg-[#fef9f1] text-[#1d1c17] overflow-x-hidden min-h-screen">
 
       {/* HERO */}
-      <section className="relative bg-[#006a6a] text-white pt-24 pb-32 px-6 flex flex-col items-center text-center overflow-hidden">
-        <div className="absolute top-10 left-10 opacity-20 -rotate-12"><span className="material-symbols-outlined text-[100px]">edit</span></div>
-        <div className="absolute top-20 right-20 opacity-20 rotate-12"><span className="material-symbols-outlined text-[80px]">favorite</span></div>
+      <section className="relative bg-[#006a6a] text-white pt-20 md:pt-24 pb-24 md:pb-32 px-5 md:px-6 flex flex-col items-center text-center overflow-hidden">
+        <div className="absolute top-10 left-10 opacity-20 -rotate-12 hidden md:block"><span className="material-symbols-outlined text-[100px]">edit</span></div>
+        <div className="absolute top-20 right-20 opacity-20 rotate-12 hidden md:block"><span className="material-symbols-outlined text-[80px]">favorite</span></div>
         <div className="max-w-3xl relative z-10">
-          <h1 className="text-5xl font-bold mb-6" style={{ fontFamily: 'Plus Jakarta Sans' }}>Layanan &amp; Harga</h1>
-          <p className="text-lg text-[#7fd5d4] max-w-2xl mx-auto">Pilih layanan terbaik untuk mendukung perkembangan optimal dan kesejahteraan mental keluarga Anda. Kami menawarkan pendekatan yang personal dan penuh empati.</p>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6" style={{ fontFamily: 'Plus Jakarta Sans' }}>Layanan &amp; Harga</h1>
+          <p className="text-base md:text-lg text-[#7fd5d4] max-w-2xl mx-auto">Pilih layanan terbaik untuk mendukung perkembangan optimal dan kesejahteraan mental keluarga Anda. Kami menawarkan pendekatan yang personal dan penuh empati.</p>
         </div>
       </section>
 
       {/* MAIN */}
-      <main className="flex-grow w-full max-w-[1200px] mx-auto px-6 py-20 flex flex-col gap-20 relative z-10 -mt-12" style={{ backgroundImage: 'radial-gradient(rgba(92,178,178,0.1) 2px, transparent 2px)', backgroundSize: '30px 30px' }}>
+      <main className="flex-grow w-full max-w-[1200px] mx-auto px-5 md:px-6 py-12 md:py-20 flex flex-col gap-12 md:gap-20 relative z-10 -mt-8 md:-mt-12" style={{ backgroundImage: 'radial-gradient(rgba(92,178,178,0.1) 2px, transparent 2px)', backgroundSize: '30px 30px' }}>
 
         {/* TABS */}
         <div className="flex flex-wrap justify-center gap-4">
-          <div className="bg-[#fef9f1]/85 backdrop-blur-md border border-white/30 py-4 px-6 rounded-full shadow-md flex flex-wrap gap-4 justify-center">
-            {[{ icon: 'psychology', label: 'Psikologi', active: true }, { icon: 'child_care', label: 'KB' }, { icon: 'school', label: 'TK' }, { icon: 'toys', label: 'TPA' }].map(t => (
-              <button key={t.label} className={`font-semibold text-sm px-6 py-2 rounded-full transition-all flex items-center gap-2 ${t.active ? 'bg-[#fc758d] text-[#720628]' : 'text-[#3e4948] hover:bg-[#ece8e0]'}`}>
-                <span className="material-symbols-outlined text-[20px]">{t.icon}</span>{t.label}
-              </button>
-            ))}
+          <div className="overflow-x-auto w-full flex justify-center">
+            <div className="bg-[#fef9f1]/85 backdrop-blur-md border border-white/30 py-3 md:py-4 px-4 md:px-6 rounded-full shadow-md flex gap-2 md:gap-4 justify-center min-w-max">
+              {[{ icon: 'psychology', label: 'Psikologi', active: true }, { icon: 'child_care', label: 'KB' }, { icon: 'school', label: 'TK' }, { icon: 'toys', label: 'TPA' }].map(t => (
+                <button key={t.label} className={`font-semibold text-xs md:text-sm px-4 md:px-6 py-2 rounded-full transition-all flex items-center gap-1 md:gap-2 ${t.active ? 'bg-[#fc758d] text-[#720628]' : 'text-[#3e4948] hover:bg-[#ece8e0]'}`}>
+                  <span className="material-symbols-outlined text-[18px] md:text-[20px]">{t.icon}</span>{t.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -51,7 +53,7 @@ export default function LayananPage() {
               <Link href="/#kontak" className="w-full bg-[#ece8e0] text-[#1d1c17] border-2 border-[#006a6a] font-semibold text-sm py-3 rounded-[24px] hover:bg-[#5cb2b2] hover:text-white hover:border-[#5cb2b2] transition-all mt-auto text-center block">Pilih Layanan</Link>
             </div>
             {/* Card 2 POPULAR */}
-            <div className="bg-white rounded-[24px] p-8 shadow-md relative border-2 border-[#fc758d] flex flex-col h-full scale-105 z-10">
+            <div className="bg-white rounded-[24px] p-6 md:p-8 shadow-md relative border-2 border-[#fc758d] flex flex-col h-full md:scale-105 z-10">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#fc758d] text-[#720628] font-semibold text-sm px-4 py-1 rounded-full shadow-sm flex items-center gap-1">
                 <span className="material-symbols-outlined text-[16px]">star</span> POPULAR
               </div>
@@ -88,10 +90,10 @@ export default function LayananPage() {
         {/* TPA */}
         <section className="flex flex-col gap-12">
           <div className="flex flex-col md:flex-row gap-12 items-center">
-            <div className="w-full md:w-1/3 relative">
+            <div className="w-full md:w-1/3 relative mb-10 md:mb-0">
               <img alt="Fasilitas TPA" className="w-full aspect-square object-cover rounded-[24px] shadow-md" src="https://images.pexels.com/photos/1250452/pexels-photo-1250452.jpeg" />
-              <div className="absolute -bottom-6 -right-6 bg-[#bc99be] rounded-full w-24 h-24 flex items-center justify-center shadow-md rotate-12">
-                <span className="material-symbols-outlined text-[#4c314f] text-[40px]">toys_and_games</span>
+              <div className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-[#bc99be] rounded-full w-16 h-16 md:w-24 md:h-24 flex items-center justify-center shadow-md rotate-12">
+                <span className="material-symbols-outlined text-[#4c314f] text-[28px] md:text-[40px]">toys_and_games</span>
               </div>
             </div>
             <div className="w-full md:w-2/3 flex flex-col gap-6">

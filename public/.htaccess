@@ -2,17 +2,17 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # 1. Force HTTPS (Highly recommended for production)
+  # Force HTTPS
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # 2. Serve static files directly from the public folder if they exist
-  # (This makes loading things like favicon and images much faster)
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
+  # 1. Disable DirectoryIndex so Apache doesn't append /index.html
+  DirectoryIndex disabled
+
+  # 2. Only serve real files from public folder (ignore directories)
+  RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 
-  # 3. Route all other traffic to the Next.js server running on port 3000
-  # Note: If your app runs on a different port (like 3001), change it here!
-  RewriteRule ^(.*)$ http://127.0.0.1:3000/$1 [P,L]
+  # 3. Pass EVERYTHING ELSE (including the / home page) to Next.js
+  RewriteRule ^(.*)$ http://127.0.0.1:3355/$1 [P,L]
 </IfModule>

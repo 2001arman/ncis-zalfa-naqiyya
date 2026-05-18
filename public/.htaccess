@@ -1,18 +1,25 @@
 # Next.js Reverse Proxy
 <IfModule mod_rewrite.c>
   RewriteEngine On
-
   # Force HTTPS
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
   # 1. Disable DirectoryIndex so Apache doesn't append /index.html
   DirectoryIndex disabled
-
   # 2. Only serve real files from public folder (ignore directories)
   RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
-
   # 3. Pass EVERYTHING ELSE (including the / home page) to Next.js
   RewriteRule ^(.*)$ http://127.0.0.1:3355/$1 [P,L]
 </IfModule>
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/virtixoc/ncis-zalfa-naqiyya"
+PassengerBaseURI "/"
+PassengerNodejs "/home/virtixoc/nodevenv/ncis-zalfa-naqiyya/20/bin/node"
+PassengerAppType node
+PassengerStartupFile app.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END

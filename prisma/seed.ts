@@ -7,7 +7,7 @@
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 // Prisma v7 requires a driver adapter
 const connectionString = process.env.DATABASE_URL

@@ -1,6 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import prisma from '@/lib/prisma'
 
 export const authOptions: NextAuthOptions = {
@@ -40,6 +40,10 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.id = user.id
+      return token
+    },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.email = token.email

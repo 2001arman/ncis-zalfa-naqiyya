@@ -1,11 +1,10 @@
 /**
- * Prisma v7 client singleton using @prisma/adapter-mariadb.
+ * Prisma v7 client singleton using @prisma/adapter-neon.
  *
- * Prisma v7 requires a driver adapter instead of the classic engine.
- * The MariaDB adapter supports both MariaDB and MySQL databases.
+ * Neon serverless driver works over WebSocket — fits Vercel functions.
  */
 import { PrismaClient } from '@prisma/client'
-import { PrismaMariaDb } from '@prisma/adapter-mariadb'
+import { PrismaNeon } from '@prisma/adapter-neon'
 
 function createPrismaClient() {
   const connectionString = process.env.DATABASE_URL
@@ -13,7 +12,7 @@ function createPrismaClient() {
     throw new Error('DATABASE_URL environment variable is not set')
   }
 
-  const adapter = new PrismaMariaDb(connectionString)
+  const adapter = new PrismaNeon({ connectionString })
   return new PrismaClient({ adapter })
 }
 

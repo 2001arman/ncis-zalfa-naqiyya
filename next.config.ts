@@ -1,13 +1,11 @@
 import type { NextConfig } from 'next'
-import path from 'path'
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
-  outputFileTracingRoot: path.join(__dirname),
-  outputFileTracingIncludes: {
-    '/**': ['./node_modules/.prisma/client/**'],
-  },
-  serverExternalPackages: ['@prisma/client', '@prisma/adapter-mariadb', 'mariadb'],
+  serverExternalPackages: [
+    '@prisma/client',
+    '@prisma/adapter-neon',
+    '@neondatabase/serverless',
+  ],
   allowedDevOrigins: ['*.ngrok-free.dev', '*.ngrok-free.app'],
   images: {
     remotePatterns: [

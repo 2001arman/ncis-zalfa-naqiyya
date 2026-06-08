@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { deletePost } from '@/lib/actions/post.actions'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
+import DeleteButton from '@/components/admin/DeleteButton'
 import { formatDate } from '@/lib/utils'
 import type { Metadata } from 'next'
 
@@ -90,22 +91,13 @@ export default async function PostsPage() {
                         Lihat
                       </Link>
                       <span className="text-surface-dim">|</span>
-                      <form
+                      <DeleteButton
                         action={async () => {
                           'use server'
                           await deletePost(post.id)
                         }}
-                      >
-                        <button
-                          type="submit"
-                          className="text-xs font-medium text-secondary hover:underline"
-                          onClick={(e) => {
-                            if (!confirm(`Hapus artikel "${post.title}"?`)) e.preventDefault()
-                          }}
-                        >
-                          Hapus
-                        </button>
-                      </form>
+                        confirmText={`Hapus artikel "${post.title}"?`}
+                      />
                     </div>
                   </td>
                 </tr>

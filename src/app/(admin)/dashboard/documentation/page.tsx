@@ -5,6 +5,7 @@ import { deleteDocumentation } from '@/lib/actions/documentation.actions'
 import { docCategoryLabel } from '@/lib/documentation'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
+import DeleteButton from '@/components/admin/DeleteButton'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -71,19 +72,13 @@ export default async function DocumentationPage() {
                         Edit
                       </Link>
                       <span className="text-surface-dim">|</span>
-                      <form
+                      <DeleteButton
                         action={async () => {
                           'use server'
                           await deleteDocumentation(doc.id)
                         }}
-                      >
-                        <button
-                          type="submit"
-                          className="text-xs font-medium text-secondary hover:underline"
-                        >
-                          Hapus
-                        </button>
-                      </form>
+                        confirmText="Hapus dokumentasi ini?"
+                      />
                     </div>
                   </td>
                 </tr>

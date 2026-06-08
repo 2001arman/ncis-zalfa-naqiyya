@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import prisma from '@/lib/prisma'
 import { formatDate } from '@/lib/utils'
+import { cldUrl } from '@/lib/cld-url'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -17,9 +17,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   })
 
   if (!post) {
-    if (slug === 'dummy-1' || slug === 'dummy-2') {
-      return { title: 'Artikel Dummy – Zalfa Naqiyya', description: 'Ini adalah contoh artikel.' }
-    }
     return { title: 'Artikel Tidak Ditemukan' }
   }
 
@@ -37,45 +34,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ArtikelDetailPage({ params }: Props) {
   const { slug } = await params
 
-  let post = await prisma.post.findUnique({
+  const post = await prisma.post.findUnique({
     where: { slug, published: true },
     include: { author: { select: { name: true } } },
-  }) as any
+  })
 
-  if (!post) {
-    if (slug === 'dummy-1' || slug === 'dummy-2') {
-      post = {
-        id: slug,
-        slug,
-        title: slug === 'dummy-1' ? 'Mengenali Tanda Kecemasan pada Anak Usia Dini' : 'Membangun Komunikasi Positif dalam Keluarga',
-        excerpt: 'Ini adalah artikel dummy. Kecemasan pada anak tidak selalu terlihat seperti pada orang dewasa.',
-        content: '<p>Kecemasan adalah emosi alami yang dialami oleh setiap orang, termasuk anak-anak. Namun, pada usia dini, anak-anak seringkali belum memiliki kemampuan untuk mengungkapkan perasaan cemas mereka dengan kata-kata.</p><h2>Mengapa Anak Bisa Merasa Cemas?</h2><p>Perubahan rutinitas, lingkungan baru seperti masuk prasekolah, atau dinamika keluarga dapat menjadi pemicu kecemasan pada anak.</p><blockquote>"Memahami bahasa tubuh dan perilaku perubahan sekecil apapun adalah kunci untuk memberikan rasa aman yang dibutuhkan anak saat mereka merasa cemas."</blockquote><h2>Tanda-tanda Umum Kecemasan</h2><ul><li><strong>Perubahan Pola Tidur:</strong> Kesulitan untuk tidur, sering terbangun di malam hari, atau mengalami mimpi buruk.</li><li><strong>Keluhan Fisik Tanpa Sebab Medis:</strong> Sering mengeluh sakit perut atau pusing terutama saat menghadapi situasi tertentu.</li></ul>',
-        coverImage: slug === 'dummy-1' ? 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg' : 'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        published: true,
-        authorId: 'dummy',
-        author: { name: 'Tim Psikolog Zalfa Naqiyya' }
-      }
-    } else {
-      notFound()
-    }
-  }
+  if (!post) notFound()
 
   // Fetch related articles
-  const relatedPosts = await prisma.post.findMany({
+  const items = await prisma.post.findMany({
     where: { published: true, id: { not: post.id } },
     orderBy: { createdAt: 'desc' },
     take: 3,
   })
-
-  const fallbackRelated = [
-    { id: '1', slug: '#', title: 'Mengenali Tanda Kecemasan pada Anak Usia Dini', excerpt: 'Kecemasan pada anak tidak selalu terlihat seperti pada orang dewasa. Memahami gejala fisik dan perilaku yang tidak biasa sangat penting untuk intervensi dini yang tepat.', coverImage: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg', createdAt: new Date('2024-10-12') },
-    { id: '2', slug: '#', title: 'Membangun Komunikasi Positif dalam Keluarga', excerpt: 'Komunikasi yang efektif adalah kunci dari keharmonisan keluarga. Pelajari strategi praktis untuk mendengarkan aktif dan berbicara dengan empati.', coverImage: 'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg', createdAt: new Date('2024-10-05') },
-    { id: '3', slug: '#', title: 'Mengenal Terapi Bermain untuk Mengatasi Trauma', excerpt: 'Terapi bermain efektif membantu anak.', coverImage: 'https://images.pexels.com/photos/3662667/pexels-photo-3662667.jpeg', createdAt: new Date('2024-09-28') },
-  ]
-
-  const items = relatedPosts.length >= 3 ? relatedPosts : fallbackRelated
 
   return (
     <div className="bg-[#f8faf6] text-[#191c1b] min-h-screen">
@@ -120,7 +91,7 @@ export default async function ArtikelDetailPage({ params }: Props) {
 
           {post.coverImage && (
             <div className="w-full h-[300px] md:h-[400px] rounded-[24px] overflow-hidden mb-10 shadow-md">
-              <img alt={post.title} className="w-full h-full object-cover" src={post.coverImage} />
+              <img alt={post.title} className="w-full h-full object-cover" src={cldUrl(post.coverImage, 'f_auto,q_auto,w_1280')} />
             </div>
           )}
 
@@ -136,6 +107,7 @@ export default async function ArtikelDetailPage({ params }: Props) {
         </article>
 
         {/* Artikel Lainnya */}
+        {items.length > 0 && (
         <section className="mb-[120px]">
           <h3 className="text-[32px] font-bold text-[#2b6955] text-center mb-12" style={{ fontFamily: 'Plus Jakarta Sans' }}>
             Artikel Lainnya
@@ -144,7 +116,7 @@ export default async function ArtikelDetailPage({ params }: Props) {
             {items.map((p) => (
               <Link key={p.id} href={`/artikel/${p.slug}`} className="block bg-white rounded-[24px] p-6 shadow-[0_8px_24px_-12px_rgba(43,105,85,0.15)] hover:shadow-[0_12px_32px_-12px_rgba(43,105,85,0.2)] transition-all duration-300 transform hover:-translate-y-1 border border-[#B2C9B2]/20">
                 <div className="w-full h-48 rounded-[16px] overflow-hidden mb-4 bg-[#eceeeb]">
-                  {p.coverImage && <img alt={p.title} className="w-full h-full object-cover" src={p.coverImage} />}
+                  {p.coverImage && <img alt={p.title} className="w-full h-full object-cover" src={cldUrl(p.coverImage, 'f_auto,q_auto,w_600')} />}
                 </div>
                 <span className="inline-block text-[12px] text-[#5CB2B2] mb-2 font-semibold" style={{ fontFamily: 'Inter' }}>Psikologi</span>
                 <h4 className="text-[18px] font-semibold text-[#191c1b] mb-2 leading-snug line-clamp-2" style={{ fontFamily: 'Plus Jakarta Sans' }}>{p.title}</h4>
@@ -155,6 +127,7 @@ export default async function ArtikelDetailPage({ params }: Props) {
             ))}
           </div>
         </section>
+        )}
 
         {/* CTA Banner */}
         <section className="bg-[#FFF8E7] rounded-[32px] p-8 md:p-12 text-center relative overflow-hidden">

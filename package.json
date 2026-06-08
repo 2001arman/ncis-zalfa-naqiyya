@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed:docs": "npx tsx scripts/seed-documentation.ts",
+    "seed:articles": "npx tsx scripts/seed-articles.ts",
     "postinstall": "prisma generate --schema=./prisma/schema.prisma"
   },
   "dependencies": {

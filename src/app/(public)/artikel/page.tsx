@@ -1,19 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import prisma from '@/lib/prisma'
+import { cldUrl } from '@/lib/cld-url'
 
 export const metadata: Metadata = { title: 'Artikel & Jurnal – Zalfa Naqiyya' }
 export const dynamic = 'force-dynamic'
 
 export default async function ArtikelPage() {
-  const posts = await prisma.post.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' }, take: 6 }).catch(() => [])
-
-  const fallback = [
-    {id:'1',slug:'dummy-1',title:'Mengenali Tanda Kecemasan pada Anak Usia Dini',excerpt:'Kecemasan pada anak tidak selalu terlihat seperti pada orang dewasa. Memahami gejala fisik dan perilaku yang tidak biasa sangat penting untuk intervensi dini yang tepat.',coverImage:'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',createdAt:new Date('2024-10-12')},
-    {id:'2',slug:'dummy-2',title:'Membangun Komunikasi Positif dalam Keluarga',excerpt:'Komunikasi yang efektif adalah kunci dari keharmonisan keluarga. Pelajari strategi praktis untuk mendengarkan aktif dan berbicara dengan empati.',coverImage:'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg',createdAt:new Date('2024-10-05')},
-  ]
-
-  const items = posts.length > 0 ? posts : fallback
+  const items = await prisma.post.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' }, take: 6 }).catch(() => [])
 
   return (
     <div className="bg-[#f8faf6] text-[#191c1b] min-h-screen">
@@ -27,11 +21,14 @@ export default async function ArtikelPage() {
 
       {/* GRID */}
       <main className="pb-16 md:pb-24 px-5 md:px-16 max-w-[1280px] mx-auto">
+        {items.length === 0 ? (
+          <p className="text-center text-[#404944] py-20">Belum ada artikel. Nantikan tulisan terbaru kami.</p>
+        ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {items.map((p) => (
             <Link href={`/artikel/${p.slug}`} key={p.id} className="block bg-white rounded-[24px] overflow-hidden border border-[#7ab8a0]/20 shadow-[0_20px_40px_-15px_rgba(43,105,85,0.08)] hover:shadow-[0_30px_50px_-15px_rgba(43,105,85,0.12)] transition-all duration-300 hover:-translate-y-1 group">
               <div className="p-6">
-                {p.coverImage && <img alt={p.title} className="w-full h-64 object-cover rounded-2xl mb-6" src={p.coverImage}/>}
+                {p.coverImage && <img alt={p.title} className="w-full h-64 object-cover rounded-2xl mb-6" src={cldUrl(p.coverImage, 'f_auto,q_auto,w_800')}/>}
                 <span className="inline-block bg-[#F2D086]/20 text-[#8c6b24] px-4 py-1.5 rounded-full font-semibold text-xs mb-4">
                   {new Date(p.createdAt).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}
                 </span>
@@ -44,21 +41,7 @@ export default async function ArtikelPage() {
             </Link>
           ))}
         </section>
-
-        {/* PAGINATION */}
-        <div className="flex justify-center items-center gap-6 mt-12">
-          <button className="flex items-center gap-2 text-[#2b6955] font-semibold text-sm opacity-50 cursor-not-allowed">
-            <span className="material-symbols-outlined">arrow_back</span>Sebelumnya
-          </button>
-          <div className="flex gap-2">
-            <span className="w-10 h-10 rounded-full bg-[#2b6955] text-white flex items-center justify-center font-semibold text-sm">1</span>
-            <span className="w-10 h-10 rounded-full bg-[#e7e9e5] text-[#191c1b] hover:bg-[#7ab8a0]/20 flex items-center justify-center font-semibold text-sm cursor-pointer transition-colors">2</span>
-            <span className="w-10 h-10 rounded-full bg-[#e7e9e5] text-[#191c1b] hover:bg-[#7ab8a0]/20 flex items-center justify-center font-semibold text-sm cursor-pointer transition-colors">3</span>
-          </div>
-          <button className="flex items-center gap-2 text-[#2b6955] font-semibold text-sm hover:text-[#7ab8a0] transition-colors">
-            Selanjutnya <span className="material-symbols-outlined">arrow_forward</span>
-          </button>
-        </div>
+        )}
       </main>
     </div>
   )

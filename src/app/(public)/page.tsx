@@ -201,22 +201,7 @@ export default async function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { tag: 'Self-Healing', title: 'Pentingnya Menciptakan "Ruang Aman" bagi Tumbuh Kembang Anak', desc: 'Lingkungan yang suportif sangat krusial dalam membentuk resiliensi mental anak sejak dini.', tagBg: 'bg-[#D8CCE8]', tagTc: 'text-[#593d5c]', img: '/images/kids-growth/kg-20.webp' },
-                { tag: 'Kids Growth', title: 'Mengenal Terapi Bermain: Solusi Ceria Atasi Kecemasan Anak', desc: 'Bermain bukan sekadar hiburan, melainkan bahasa natural anak dalam mengekspresikan emosi.', tagBg: 'bg-[#F2D086]', tagTc: 'text-[#1d1c17]', img: '/images/kids-growth/kg-08.webp' },
-                { tag: 'Tips Psikologi', title: 'Teknik Sederhana Manajemen Stres untuk Orang Tua Milenial', desc: 'Menjaga kewarasan orang tua adalah langkah pertama sebelum mendampingi anak bertumbuh.', tagBg: 'bg-[#B2C9B2]', tagTc: 'text-[#004f50]', img: '/images/paud/paud-57.webp' },
-              ].map(a => (
-                <div key={a.title} className="bg-white rounded-[32px] overflow-hidden shadow-md group cursor-pointer border border-[#ece8e0]">
-                  <div className="h-48 overflow-hidden"><img alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={a.img} /></div>
-                  <div className="p-6 space-y-3">
-                    <span className={`px-3 py-1 ${a.tagBg} ${a.tagTc} text-xs font-bold rounded-full`}>{a.tag}</span>
-                    <h3 className="text-xl font-semibold text-[#1d1c17] line-clamp-2 group-hover:text-[#006a6a] transition-colors" style={{ fontFamily: 'Plus Jakarta Sans' }}>{a.title}</h3>
-                    <p className="text-[#3e4948] line-clamp-2 text-sm">{a.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="text-[#3e4948] text-center py-8">Artikel akan segera hadir.</p>
           )}
         </div>
       </section>

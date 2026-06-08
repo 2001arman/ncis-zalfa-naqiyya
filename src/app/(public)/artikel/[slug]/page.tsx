@@ -66,13 +66,7 @@ export default async function ArtikelDetailPage({ params }: Props) {
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#b0f0d6] opacity-50 rounded-full blur-2xl -z-10"></div>
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#ffdad9] opacity-50 rounded-full blur-2xl -z-10"></div>
 
-          <div className="mb-6 flex items-center gap-3">
-            <span className="inline-block bg-[#F2D086] text-[#191c1b] px-4 py-1.5 rounded-full font-semibold text-[14px] shadow-sm" style={{ fontFamily: 'Plus Jakarta Sans' }}>
-              Psikologi Anak
-            </span>
-          </div>
-
-          <h1 className="text-[32px] md:text-[48px] font-bold text-[#5CB2B2] mb-6 leading-tight" style={{ fontFamily: 'Plus Jakarta Sans' }}>
+          <h1 className="text-[32px] md:text-[48px] font-bold text-[#5CB2B2] mb-6 mt-2 leading-tight" style={{ fontFamily: 'Plus Jakarta Sans' }}>
             {post.title}
           </h1>
 

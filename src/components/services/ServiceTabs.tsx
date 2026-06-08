@@ -59,16 +59,25 @@ type EduUnit = {
   photos?: string[]
 }
 
-const KG_PHOTOS = ['/images/kids-growth/kg-05.webp', '/images/kids-growth/kg-08.webp', '/images/kids-growth/kg-20.webp', '/images/kids-growth/kg-03.webp']
-
-function PhotoStrip({ photos }: { photos: string[] }) {
+// Photo strip filtered by category; hidden entirely when there are no photos.
+// Includes a "Lihat Semua" button linking to the full documentation page.
+function DocSection({ title, photos }: { title: string; photos: string[] }) {
+  if (photos.length === 0) return null
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
-      {photos.map((src, i) => (
-        <div key={src} className="overflow-hidden rounded-[18px] shadow-md group aspect-[4/3]">
-          <img src={src} alt={`Dokumentasi kegiatan ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        </div>
-      ))}
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-xl font-semibold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>{title}</h3>
+        <Link href="/dokumentasi" className="inline-flex items-center gap-1 text-sm font-semibold text-[#006a6a] hover:text-[#004f50] transition-colors">
+          Lihat Semua <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </Link>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+        {photos.map((src, i) => (
+          <div key={src} className="overflow-hidden rounded-[18px] shadow-md group aspect-[4/3]">
+            <img src={src} alt={`${title} ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -224,10 +233,7 @@ function PsikologiPanel({ kgPhotos }: { kgPhotos: string[] }) {
       </div>
 
       {/* Kids Growth documentation */}
-      <div className="flex flex-col gap-4">
-        <h3 className="text-xl font-semibold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Dokumentasi Kids Growth Program</h3>
-        <PhotoStrip photos={kgPhotos} />
-      </div>
+      <DocSection title="Dokumentasi Kids Growth Program" photos={kgPhotos} />
     </div>
   )
 }
@@ -280,12 +286,7 @@ function EduPanel({ unit, photos }: { unit: EduUnit; photos: string[] }) {
         ))}
       </div>
 
-      {photos.length > 0 && (
-        <div className="flex flex-col gap-4">
-          <h3 className="text-xl font-semibold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Dokumentasi Kegiatan</h3>
-          <PhotoStrip photos={photos} />
-        </div>
-      )}
+      <DocSection title="Dokumentasi Kegiatan" photos={photos} />
 
       <div className="text-center">
         <Link href="/#kontak" className="bg-[#006a6a] text-white px-8 py-3 rounded-[24px] text-sm font-semibold hover:bg-[#5cb2b2] transition-all shadow-md inline-flex items-center gap-2">
@@ -299,10 +300,22 @@ function EduPanel({ unit, photos }: { unit: EduUnit; photos: string[] }) {
 export default function ServiceTabs({ docsByCategory = {} }: { docsByCategory?: Record<string, string[]> }) {
   const [active, setActive] = useState('psikologi')
 
-  const nonEmpty = (arr?: string[]) => (arr && arr.length > 0 ? arr : undefined)
-  const kgPhotos = nonEmpty(docsByCategory['kids-growth']) ?? KG_PHOTOS
-  const eduPhotos = (catId: string) =>
-    nonEmpty(docsByCategory[catId]) ?? nonEmpty(docsByCategory['paud']) ?? EDU_UNITS[catId]?.photos ?? []
+  // Category-filtered, max 4 per section. Empty → section hidden.
+  // TPA/KB/TK fall back to the shared "paud" pool when their own category is empty.
+  const PAUD_FALLBACK = ['tpa', 'kb', 'tk']
+  const kgPhotos = (docsByCategory['kids-growth'] ?? []).slice(0, 4)
+  const eduPhotos = (catId: string) => {
+    const own = docsByCategory[catId] ?? []
+    if (own.length > 0) return own.slice(0, 4)
+    if (PAUD_FALLBACK.includes(catId)) {
+      const pool = docsByCategory['paud'] ?? []
+      if (pool.length === 0) return []
+      // Distinct, non-overlapping slice per tab (wraps if the pool is small).
+      const offset = (PAUD_FALLBACK.indexOf(catId) * 4) % pool.length
+      return Array.from({ length: Math.min(4, pool.length) }, (_, i) => pool[(offset + i) % pool.length])
+    }
+    return []
+  }
 
   return (
     <div className="flex flex-col gap-12 md:gap-16">

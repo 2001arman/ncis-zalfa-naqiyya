@@ -112,7 +112,6 @@ export default async function ArtikelDetailPage({ params }: Props) {
                 <div className="w-full h-48 rounded-[16px] overflow-hidden mb-4 bg-[#eceeeb]">
                   {p.coverImage && <img alt={p.title} className="w-full h-full object-cover" src={cldUrl(p.coverImage, 'f_auto,q_auto,w_600')} />}
                 </div>
-                <span className="inline-block text-[12px] text-[#5CB2B2] mb-2 font-semibold" style={{ fontFamily: 'Inter' }}>Psikologi</span>
                 <h4 className="text-[18px] font-semibold text-[#191c1b] mb-2 leading-snug line-clamp-2" style={{ fontFamily: 'Plus Jakarta Sans' }}>{p.title}</h4>
                 <p className="text-[12px] text-[#404944] flex items-center gap-1" style={{ fontFamily: 'Inter' }}>
                   <span className="material-symbols-outlined text-[14px]">calendar_today</span> {formatDate(p.createdAt)}

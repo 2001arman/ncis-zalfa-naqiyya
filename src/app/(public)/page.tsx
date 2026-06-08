@@ -193,7 +193,6 @@ export default async function HomePage() {
                 <Link key={a.id} href={`/artikel/${a.slug}`} className="bg-white rounded-[32px] overflow-hidden shadow-md group cursor-pointer border border-[#ece8e0] hover:-translate-y-1 transition-transform duration-300">
                   {a.coverImage && <div className="h-48 overflow-hidden"><img src={cldUrl(a.coverImage, 'f_auto,q_auto,w_600')} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /></div>}
                   <div className="p-6 space-y-3">
-                    <span className="px-3 py-1 bg-[#D8CCE8] text-[#593d5c] text-xs font-bold rounded-full">Psikologi</span>
                     <h3 className="text-xl font-semibold text-[#1d1c17] line-clamp-2 group-hover:text-[#006a6a] transition-colors" style={{ fontFamily: 'Plus Jakarta Sans' }}>{a.title}</h3>
                     {a.excerpt && <p className="text-[#3e4948] line-clamp-2 text-sm">{a.excerpt}</p>}
                   </div>

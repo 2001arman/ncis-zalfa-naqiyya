@@ -21,8 +21,9 @@ model Post {
   slug       String   @unique
   title      String
   excerpt    String?
-  content    String // Tiptap HTML content
-  coverImage String? // Cloudinary URL
+  content      String // Tiptap HTML content
+  coverImage   String? // Cloudinary URL
+  coverPublicId String? // Cloudinary public_id — for deleting the asset
   published  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

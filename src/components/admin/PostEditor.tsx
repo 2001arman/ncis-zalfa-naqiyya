@@ -15,6 +15,7 @@ interface PostEditorProps {
     excerpt?: string
     content?: string
     coverImage?: string
+    coverPublicId?: string
     published?: boolean
   }
 }
@@ -22,6 +23,7 @@ interface PostEditorProps {
 export default function PostEditor({ formAction, initialData }: PostEditorProps) {
   const [state, action, pending] = useActionState(formAction, {})
   const [coverPreview, setCoverPreview] = useState<string>(initialData?.coverImage ?? '')
+  const [coverPublicId, setCoverPublicId] = useState<string>(initialData?.coverPublicId ?? '')
   const [uploading, setUploading] = useState(false)
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -50,6 +52,7 @@ export default function PostEditor({ formAction, initialData }: PostEditorProps)
 
       if (data.secure_url) {
         setCoverPreview(data.secure_url)
+        setCoverPublicId(data.public_id ?? '')
       }
     } catch {
       alert('Gagal mengunggah gambar.')
@@ -114,7 +117,7 @@ export default function PostEditor({ formAction, initialData }: PostEditorProps)
             />
             <button
               type="button"
-              onClick={() => setCoverPreview('')}
+              onClick={() => { setCoverPreview(''); setCoverPublicId('') }}
               className="absolute top-2 right-2 bg-black/50 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-black/70"
               aria-label="Hapus gambar"
             >
@@ -129,8 +132,9 @@ export default function PostEditor({ formAction, initialData }: PostEditorProps)
           disabled={uploading || pending}
           className="text-sm font-body text-text-muted file:mr-3 file:rounded-xl file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary hover:file:bg-primary/20 transition-colors"
         />
-        {/* Hidden input to pass URL to server action */}
+        {/* Hidden inputs to pass URL + Cloudinary id to server action */}
         <input type="hidden" name="coverImage" value={coverPreview} />
+        <input type="hidden" name="coverPublicId" value={coverPublicId} />
       </div>
 
       {/* Content */}

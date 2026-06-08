@@ -1,6 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prisma'
+import cloudinary from '@/lib/cloudinary'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
@@ -10,6 +11,15 @@ import { slugify } from '@/lib/utils'
 export interface PostFormState {
   success?: boolean
   message?: string
+}
+
+async function destroyCloudinary(publicId?: string | null) {
+  if (!publicId) return
+  try {
+    await cloudinary.uploader.destroy(publicId)
+  } catch {
+    // best-effort — ignore failures
+  }
 }
 
 async function requireAdmin() {
@@ -30,6 +40,7 @@ export async function createPost(
   const excerpt = (formData.get('excerpt') as string)?.trim()
   const content = (formData.get('content') as string)?.trim()
   const coverImage = (formData.get('coverImage') as string)?.trim()
+  const coverPublicId = (formData.get('coverPublicId') as string)?.trim()
   const published = formData.get('published') === 'true'
 
   if (!title || !content) {
@@ -52,6 +63,7 @@ export async function createPost(
         excerpt: excerpt || null,
         content,
         coverImage: coverImage || null,
+        coverPublicId: coverPublicId || null,
         published,
         authorId: admin.id,
       },
@@ -75,6 +87,7 @@ export async function updatePost(
   const excerpt = (formData.get('excerpt') as string)?.trim()
   const content = (formData.get('content') as string)?.trim()
   const coverImage = (formData.get('coverImage') as string)?.trim()
+  const coverPublicId = (formData.get('coverPublicId') as string)?.trim()
   const published = formData.get('published') === 'true'
 
   if (!title || !content) {
@@ -82,6 +95,13 @@ export async function updatePost(
   }
 
   const slug = slugify(title)
+
+  // Destroy the previous cover if it changed/was removed.
+  const existing = await prisma.post.findUnique({ where: { id }, select: { coverPublicId: true } })
+  const newPublicId = coverPublicId || null
+  if (existing?.coverPublicId && existing.coverPublicId !== newPublicId) {
+    await destroyCloudinary(existing.coverPublicId)
+  }
 
   try {
     await prisma.post.update({
@@ -92,6 +112,7 @@ export async function updatePost(
         excerpt: excerpt || null,
         content,
         coverImage: coverImage || null,
+        coverPublicId: newPublicId,
         published,
       },
     })
@@ -109,7 +130,11 @@ export async function updatePost(
 export async function deletePost(id: string): Promise<void> {
   await requireAdmin()
 
+  const post = await prisma.post.findUnique({ where: { id }, select: { coverPublicId: true } })
+
   await prisma.post.delete({ where: { id } })
+
+  await destroyCloudinary(post?.coverPublicId)
 
   revalidatePath('/artikel')
   revalidatePath('/dashboard/posts')

@@ -23,6 +23,7 @@ export default async function EditPostPage({ params }: Props) {
       excerpt: true,
       content: true,
       coverImage: true,
+      coverPublicId: true,
       published: true,
     },
   })
@@ -45,6 +46,7 @@ export default async function EditPostPage({ params }: Props) {
           excerpt: post.excerpt ?? undefined,
           content: post.content,
           coverImage: post.coverImage ?? undefined,
+          coverPublicId: post.coverPublicId ?? undefined,
           published: post.published,
         }}
       />

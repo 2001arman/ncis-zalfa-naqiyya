@@ -168,7 +168,7 @@ export default async function ArtikelDetailPage({ params }: Props) {
               Tim psikolog kami siap membantu perjalanan Anda dan buah hati menuju kesejahteraan emosional yang lebih baik.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="https://wa.me/" className="flex items-center justify-center gap-2 bg-[#5CB2B2] text-white px-8 py-3 rounded-full font-semibold text-[14px] hover:bg-[#2C6E6A] transition-colors w-full sm:w-auto shadow-sm" style={{ fontFamily: 'Plus Jakarta Sans' }}>
+              <a href="https://wa.me/6285148682579" className="flex items-center justify-center gap-2 bg-[#5CB2B2] text-white px-8 py-3 rounded-full font-semibold text-[14px] hover:bg-[#2C6E6A] transition-colors w-full sm:w-auto shadow-sm" style={{ fontFamily: 'Plus Jakarta Sans' }}>
                 <span className="material-symbols-outlined text-[20px]">chat</span>
                 WhatsApp Kami
               </a>

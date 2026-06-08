@@ -7,11 +7,15 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 
 const SERVICES = [
-  'Konsultasi Tumbuh Kembang',
-  'Terapi Wicara',
-  'Parenting Coaching',
-  'Evaluasi Perkembangan',
-  'Konsultasi Online',
+  'Psychological Assessment',
+  'Counseling',
+  'Kids Growth Program',
+  'Self Healing Activity',
+  'Other Related Services',
+  'TPA / Daycare',
+  'KB (Kelompok Bermain)',
+  'TK Alif',
+  'Bimbingan Belajar',
 ]
 
 const initialState: ConsultationFormState = {}

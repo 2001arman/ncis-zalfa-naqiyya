@@ -17,9 +17,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Zalfa Naqiyya – Konsultasi & Terapi Tumbuh Kembang Anak',
+  title: 'Zalfa Naqiyya Psychology Center – Biro Psikologi & Pendidikan Anak',
   description:
-    'Layanan konsultasi profesional untuk tumbuh kembang anak, terapi wicara, dan bimbingan parenting bersama tim ahli Zalfa Naqiyya.',
+    'Biro psikologi yang berfokus pada pengembangan kesehatan mental dan tumbuh kembang individu, khususnya anak dan keluarga. Layanan asesmen psikologis, konseling, Kids Growth Program, self healing, hingga pendidikan anak usia dini di Samarinda.',
 }
 
 export default function RootLayout({

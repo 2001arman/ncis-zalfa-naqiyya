@@ -35,7 +35,7 @@ export default async function HomePage() {
               Pusat psikologi yang berdedikasi menciptakan lingkungan nyaman bagi anak, remaja, dan keluarga untuk berkembang secara optimal melalui pendekatan holistik dan suportif.
             </p>
             <div className="flex flex-wrap gap-3 md:gap-4 pt-2 md:pt-4">
-              <a href="https://wa.me/" className="bg-[#006a6a] text-white px-6 md:px-8 py-3 md:py-3.5 rounded-[24px] text-sm font-semibold hover:-translate-y-0.5 transition-transform shadow-lg flex items-center gap-2" style={{ fontFamily: 'Inter' }}>
+              <a href="https://wa.me/6285148682579" className="bg-[#006a6a] text-white px-6 md:px-8 py-3 md:py-3.5 rounded-[24px] text-sm font-semibold hover:-translate-y-0.5 transition-transform shadow-lg flex items-center gap-2" style={{ fontFamily: 'Inter' }}>
                 <span className="material-symbols-outlined fill-icon">forum</span>WhatsApp
               </a>
               <Link href="/#kontak" className="border-2 border-[#006a6a] text-[#006a6a] px-6 md:px-8 py-3 md:py-3.5 rounded-[24px] text-sm font-semibold hover:bg-[#f8f3eb] transition-colors flex items-center gap-2">
@@ -57,11 +57,11 @@ export default async function HomePage() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {[
-              { num: '01', bg: '#B2C9B2', icon: 'psychiatry', title: 'Growth', desc: 'Bertumbuh dalam proses', tc: '#004f50' },
-              { num: '02', bg: '#F8D4D4', icon: 'favorite', title: 'Empathy', desc: 'Pendekatan penuh empati', tc: '#871b37', mt: true },
-              { num: '03', bg: '#D8CCE8', icon: 'health_and_safety', title: 'Safe Space', desc: 'Ruang aman bercerita', tc: '#593d5c' },
-              { num: '04', bg: '#F2D086', icon: 'auto_awesome', title: 'Meaningful', desc: 'Aktivitas bermakna', tc: '#1d1c17', mt: true },
-              { num: '05', bg: '#B2C9B2', icon: 'all_inclusive', title: 'Holistic', desc: 'Pendekatan menyeluruh', tc: '#004f50' },
+              { num: '01', bg: '#B2C9B2', icon: 'psychiatry', title: 'Growth', desc: 'Mendukung perkembangan individu secara berkelanjutan', tc: '#004f50' },
+              { num: '02', bg: '#F8D4D4', icon: 'favorite', title: 'Empathy', desc: 'Mengedepankan pemahaman dan kepekaan terhadap setiap individu', tc: '#871b37', mt: true },
+              { num: '03', bg: '#D8CCE8', icon: 'health_and_safety', title: 'Safe Space', desc: 'Ruang yang aman, nyaman, dan bebas dari penilaian', tc: '#593d5c' },
+              { num: '04', bg: '#F2D086', icon: 'auto_awesome', title: 'Meaningful', desc: 'Pengalaman belajar yang relevan dan berdampak', tc: '#1d1c17', mt: true },
+              { num: '05', bg: '#B2C9B2', icon: 'all_inclusive', title: 'Holistic', desc: 'Melihat individu secara menyeluruh', tc: '#004f50' },
             ].map(v => (
               <div key={v.num} className={`p-6 rounded-[32px] flex flex-col items-center text-center space-y-4 hover:-translate-y-1 transition-transform duration-300 relative shadow-md ${v.mt ? 'lg:mt-8' : ''}`} style={{ backgroundColor: v.bg }}>
                 <span className="absolute top-4 left-4 text-2xl font-bold opacity-30" style={{ color: v.tc }}>{v.num}</span>
@@ -87,11 +87,11 @@ export default async function HomePage() {
           </div>
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-[#006a6a]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Tentang Kami</h2>
-            <p className="text-lg text-[#3e4948] leading-relaxed">Zalfa Naqiyya Psychology Center adalah wadah profesional yang menyediakan layanan psikologi komprehensif. Kami percaya bahwa setiap individu memiliki potensi untuk bertumbuh dan pulih ketika diberikan ruang yang aman dan suportif.</p>
+            <p className="text-lg text-[#3e4948] leading-relaxed">Zalfa Naqiyya Psychology Center merupakan layanan biro psikologi yang berfokus pada pengembangan kesehatan mental dan tumbuh kembang individu, khususnya anak dan keluarga. Kami hadir sebagai ruang aman yang mendukung proses tumbuh kembang secara utuh melalui pendekatan yang profesional, empatik, dan berbasis kebutuhan individu. Setiap layanan dirancang untuk memberikan pengalaman yang tidak hanya solutif, tetapi juga bermakna.</p>
             <div className="bg-[#F2D086]/20 p-8 rounded-[32px] border-2 border-[#F2D086] border-dashed relative">
               <span className="material-symbols-outlined absolute -top-5 -left-5 text-4xl text-[#F2D086] bg-white rounded-full p-2">lightbulb</span>
               <h3 className="text-xl font-semibold text-[#1d1c17] mb-3" style={{ fontFamily: 'Plus Jakarta Sans' }}>Visi Kami</h3>
-              <p className="text-[#3e4948] italic">&quot;Menjadi pusat layanan psikologi terpercaya yang mengedepankan pendekatan holistik, empati, dan aktivitas bermakna untuk mendukung pertumbuhan mental setiap individu.&quot;</p>
+              <p className="text-[#3e4948] italic">&quot;Ruang tumbuh yang aman dan bermakna untuk perkembangan diri yang utuh.&quot;</p>
             </div>
           </div>
         </div>
@@ -108,10 +108,11 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
-              { icon: 'child_care', title: 'Kids Growth Program', desc: 'Program komprehensif untuk mendukung perkembangan kognitif, emosional, dan sosial anak melalui aktivitas terstruktur dan bermain bermakna.', ic: '#F2D086', hov: 'hover:bg-[#F2D086]/30', rot: 'rotate-3 group-hover:rotate-6' },
-              { icon: 'assignment', title: 'Psychological Assessment', desc: 'Evaluasi mendalam untuk memahami profil kognitif, kepribadian, dan potensi individu guna merancang penanganan yang tepat sasaran.', ic: '#B2C9B2', hov: 'hover:bg-[#B2C9B2]/30', rot: '-rotate-3 group-hover:-rotate-6' },
-              { icon: 'self_improvement', title: 'Self-Healing', desc: 'Sesi terapeutik untuk membantu individu memproses trauma, mengelola stres, dan menemukan kembali keseimbangan emosional.', ic: '#F8D4D4', hov: 'hover:bg-[#F8D4D4]/30', rot: 'rotate-6 group-hover:rotate-12' },
-              { icon: 'more_horiz', title: 'Layanan Lainnya', desc: 'Konseling keluarga, bimbingan pranikah, dan program psikoedukasi khusus yang disesuaikan dengan kebutuhan komunitas.', ic: '#D8CCE8', hov: 'hover:bg-[#D8CCE8]/30', rot: '-rotate-6 group-hover:-rotate-12' },
+              { icon: 'assignment', title: 'Psychological Assessment', desc: 'Asesmen psikologis komprehensif meliputi aspek kognitif, emosional, perilaku, dan sosial — dari tes IQ, kepribadian, minat & bakat, hingga skrining tumbuh kembang.', ic: '#B2C9B2', hov: 'hover:bg-[#B2C9B2]/30', rot: '-rotate-3 group-hover:-rotate-6' },
+              { icon: 'diversity_3', title: 'Counseling', desc: 'Konseling untuk anak & remaja, individu dewasa, pasangan (pra nikah & konflik), keluarga, serta karir dan pendidikan.', ic: '#D8CCE8', hov: 'hover:bg-[#D8CCE8]/30', rot: 'rotate-3 group-hover:rotate-6' },
+              { icon: 'child_care', title: 'Kids Growth Program', desc: 'Program stimulasi tumbuh kembang anak berbasis play-based learning untuk berkembang optimal dalam aspek kognitif, emosional, sosial, motorik, dan perilaku.', ic: '#F2D086', hov: 'hover:bg-[#F2D086]/30', rot: 'rotate-3 group-hover:rotate-6' },
+              { icon: 'self_improvement', title: 'Self Healing Activity', desc: 'Kegiatan reflektif dan kreatif — workshop, art therapy, dan support group — untuk menenangkan emosi dan meningkatkan kesejahteraan mental.', ic: '#F8D4D4', hov: 'hover:bg-[#F8D4D4]/30', rot: 'rotate-6 group-hover:rotate-12' },
+              { icon: 'more_horiz', title: 'Other Related Services', desc: 'Psikoedukasi, pelatihan psikologi untuk individu & institusi, parenting class, kids activity event, hingga kolaborasi dengan brand & komunitas.', ic: '#B2C9B2', hov: 'hover:bg-[#B2C9B2]/30', rot: '-rotate-6 group-hover:-rotate-12' },
             ].map(s => (
               <div key={s.title} className={`bg-[#ece8e0] rounded-[40px] p-8 shadow-md relative overflow-hidden group ${s.hov} transition-colors duration-300`}>
                 <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-500">
@@ -136,13 +137,13 @@ export default async function HomePage() {
           <div className="text-center space-y-3 md:space-y-4 mb-10 md:mb-16">
             <div className="inline-block px-4 py-2 bg-white/40 rounded-full text-sm font-semibold text-[#1d1c17]">Program Unggulan</div>
             <h2 className="text-2xl md:text-3xl font-bold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Kids Growth Program</h2>
-            <p className="text-base md:text-lg text-[#3e4948] max-w-2xl mx-auto">Dirancang khusus dengan pendekatan fun &amp; meaningful untuk anak usia 3-12 tahun.</p>
+            <p className="text-base md:text-lg text-[#3e4948] max-w-2xl mx-auto">Program berbasis play-based learning dengan tiga growth stages: Little Seed (6–18 bln), Growing Bud (18 bln–2,5 thn), dan Blooming Kids (2,5–5 thn).</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8">
             {[
-              { color: '#006a6a', icon: 'toys', title: 'Aktivitas', tc: 'text-[#006a6a]', items: ['Sensori Integrasi Dasar', 'Brain Gym Ringan', 'Art & Play Therapy'], mt: 'sm:mt-12' },
-              { color: '#a7344d', icon: 'psychology', title: 'Manfaat', tc: 'text-[#a7344d]', items: ['Regulasi Emosi Lebih Baik', 'Peningkatan Fokus', 'Percaya Diri Meningkat'], mt: 'sm:-mt-4' },
-              { color: '#725475', icon: 'flag', title: 'Tujuan', tc: 'text-[#725475]', items: ['Kemandirian Anak', 'Kesiapan Sekolah', 'Bonding Keluarga'], mt: 'sm:mt-12' },
+              { color: '#006a6a', icon: 'toys', title: 'Growth Stages', tc: 'text-[#006a6a]', items: ['Little Seed (6–18 bln)', 'Growing Bud (18 bln–2,5 thn)', 'Blooming Kids (2,5–5 thn)'], mt: 'sm:mt-12' },
+              { color: '#a7344d', icon: 'psychology', title: 'Aspek Perkembangan', tc: 'text-[#a7344d]', items: ['Kognitif & Bahasa', 'Emosi & Sosial', 'Motorik & Perilaku'], mt: 'sm:-mt-4' },
+              { color: '#725475', icon: 'flag', title: 'Pendekatan', tc: 'text-[#725475]', items: ['Play-based Learning', 'Pengalaman Menyenangkan', 'Bermakna & Optimal'], mt: 'sm:mt-12' },
             ].map(c => (
               <div key={c.title} className={`bg-white/80 backdrop-blur-md p-6 md:p-8 rounded-[32px] shadow-md relative ${c.mt}`}>
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center shadow-lg border-4 border-[#F2D086]" style={{ backgroundColor: c.color }}>
@@ -224,20 +225,27 @@ export default async function HomePage() {
                 <h3 className="text-xl font-semibold mb-6 relative z-10" style={{ fontFamily: 'Plus Jakarta Sans' }}>Hubungi Kami</h3>
                 <div className="space-y-6 relative z-10">
                   {[
-                    { icon: 'location_on', label: 'Alamat', val: 'Jl. Psikologi Damai No. 88, Ruang Tumbuh, Kota Sejahtera 12345' },
-                    { icon: 'mail', label: 'Email', val: 'halo@zalfanaqiyya.com' },
-                    { icon: 'schedule', label: 'Jam Operasional', val: 'Senin - Jumat: 09.00 - 17.00\nSabtu: Dengan Janji Temu' },
-                  ].map(c => (
-                    <div key={c.label} className="flex gap-4 items-start">
-                      <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-white">{c.icon}</span>
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold mb-1">{c.label}</h4>
-                        <p className="text-white/80 text-sm whitespace-pre-line">{c.val}</p>
-                      </div>
-                    </div>
-                  ))}
+                    { icon: 'location_on', label: 'Alamat', val: 'Jl. A. Wahab Syahrani Gg. Kejaksaan No. 27 RT. 35, Samarinda', href: undefined },
+                    { icon: 'chat', label: 'WhatsApp', val: '+62 851-4868-2579', href: 'https://wa.me/6285148682579' },
+                    { icon: 'alternate_email', label: 'Instagram', val: '@zalfanaqiyya.psy', href: 'https://instagram.com/zalfanaqiyya.psy' },
+                  ].map(c => {
+                    const Inner = (
+                      <>
+                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                          <span className="material-symbols-outlined text-white">{c.icon}</span>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold mb-1">{c.label}</h4>
+                          <p className="text-white/80 text-sm whitespace-pre-line">{c.val}</p>
+                        </div>
+                      </>
+                    )
+                    return c.href ? (
+                      <a key={c.label} href={c.href} className="flex gap-4 items-start hover:opacity-90 transition-opacity">{Inner}</a>
+                    ) : (
+                      <div key={c.label} className="flex gap-4 items-start">{Inner}</div>
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -246,7 +254,7 @@ export default async function HomePage() {
       </section>
 
       {/* FLOATING WA */}
-      <a href="https://wa.me/" className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 group flex items-center">
+      <a href="https://wa.me/6285148682579" className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 group flex items-center">
         <div className="absolute right-full mr-4 bg-white px-4 py-2 rounded-full shadow-lg text-[#006a6a] text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           Konsultasi via WhatsApp
         </div>

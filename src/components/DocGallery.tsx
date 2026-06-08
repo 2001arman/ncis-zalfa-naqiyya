@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { DOC_CATEGORIES } from '@/lib/documentation'
+import { cldUrl } from '@/lib/cld-url'
 
 export interface DocItem {
   id: string
@@ -49,7 +50,7 @@ export default function DocGallery({ docs }: { docs: DocItem[] }) {
           {filtered.map((doc, i) => (
             <figure key={doc.id} className="overflow-hidden rounded-[20px] md:rounded-[28px] shadow-md group aspect-square relative bg-[#ece8e0]">
               <img
-                src={doc.imageUrl}
+                src={cldUrl(doc.imageUrl, 'f_auto,q_auto,w_800')}
                 alt={doc.caption ?? `Dokumentasi ${i + 1}`}
                 loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

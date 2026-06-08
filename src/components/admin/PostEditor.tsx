@@ -5,6 +5,7 @@ import TiptapEditor from '@/components/admin/TiptapEditor'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Image from 'next/image'
+import { compressImage } from '@/lib/compress-image'
 import type { PostFormState } from '@/lib/actions/post.actions'
 
 interface PostEditorProps {
@@ -24,11 +25,12 @@ export default function PostEditor({ formAction, initialData }: PostEditorProps)
   const [uploading, setUploading] = useState(false)
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const rawFile = e.target.files?.[0]
+    if (!rawFile) return
 
     setUploading(true)
     try {
+      const file = await compressImage(rawFile)
       // Get signed URL from our API route
       const sigRes = await fetch('/api/upload', { method: 'POST' })
       const { signature, timestamp, cloudName, apiKey } = await sigRes.json()

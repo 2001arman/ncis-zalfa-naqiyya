@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { cldUrl } from '@/lib/cld-url'
 
 type Tab = { id: string; icon: string; label: string }
 
@@ -74,7 +75,7 @@ function DocSection({ title, photos }: { title: string; photos: string[] }) {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
         {photos.map((src, i) => (
           <div key={src} className="overflow-hidden rounded-[18px] shadow-md group aspect-[4/3]">
-            <img src={src} alt={`${title} ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <img src={cldUrl(src, 'f_auto,q_auto,w_600')} alt={`${title} ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           </div>
         ))}
       </div>

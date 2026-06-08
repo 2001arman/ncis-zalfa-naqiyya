@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { DOC_CATEGORIES } from '@/lib/documentation'
+import { compressImage } from '@/lib/compress-image'
 import type { DocFormState } from '@/lib/actions/documentation.actions'
 
 interface DocEditorProps {
@@ -26,11 +27,12 @@ export default function DocEditor({ formAction, initialData }: DocEditorProps) {
   const [uploading, setUploading] = useState(false)
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const rawFile = e.target.files?.[0]
+    if (!rawFile) return
 
     setUploading(true)
     try {
+      const file = await compressImage(rawFile)
       const sigRes = await fetch('/api/upload', { method: 'POST' })
       const { signature, timestamp, cloudName, apiKey } = await sigRes.json()
 

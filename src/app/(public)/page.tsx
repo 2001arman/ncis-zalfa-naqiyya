@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma'
 import Image from 'next/image'
 import Link from 'next/link'
 import ConsultationForm from '@/components/forms/ConsultationForm'
+import { cldUrl } from '@/lib/cld-url'
 
 export const dynamic = 'force-dynamic'
 
@@ -190,7 +191,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {articles.map((a) => (
                 <Link key={a.id} href={`/artikel/${a.slug}`} className="bg-white rounded-[32px] overflow-hidden shadow-md group cursor-pointer border border-[#ece8e0] hover:-translate-y-1 transition-transform duration-300">
-                  {a.coverImage && <div className="h-48 overflow-hidden"><img src={a.coverImage} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /></div>}
+                  {a.coverImage && <div className="h-48 overflow-hidden"><img src={cldUrl(a.coverImage, 'f_auto,q_auto,w_600')} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /></div>}
                   <div className="p-6 space-y-3">
                     <span className="px-3 py-1 bg-[#D8CCE8] text-[#593d5c] text-xs font-bold rounded-full">Psikologi</span>
                     <h3 className="text-xl font-semibold text-[#1d1c17] line-clamp-2 group-hover:text-[#006a6a] transition-colors" style={{ fontFamily: 'Plus Jakarta Sans' }}>{a.title}</h3>
@@ -233,7 +234,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {galleryImages.map((src, i) => (
               <div key={src} className="overflow-hidden rounded-[20px] md:rounded-[28px] shadow-md group aspect-square">
-                <img src={src} alt={`Galeri kegiatan ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src={cldUrl(src, 'f_auto,q_auto,w_600')} alt={`Galeri kegiatan ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
             ))}
           </div>

@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 const links = [
   { label: 'Beranda', href: '/' },
   { label: 'Layanan', href: '/layanan' },
+  { label: 'Dokumentasi', href: '/dokumentasi' },
   { label: 'Artikel', href: '/artikel' },
 ]
 
@@ -39,10 +40,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-xl font-extrabold text-[#5CB2B2] tracking-tight"
+            className="flex items-center gap-2.5"
             style={{ fontFamily: 'Plus Jakarta Sans' }}
           >
-            Zalfa Naqiyya
+            <img src="/images/logo/logo.webp" alt="Zalfa Naqiyya Psychology Center" className="h-10 md:h-11 w-auto" />
+            <span className="hidden sm:block text-lg font-extrabold text-[#5CB2B2] tracking-tight leading-none">Zalfa Naqiyya</span>
           </Link>
 
           {/* Desktop nav links */}

@@ -56,6 +56,21 @@ type EduUnit = {
   visi: string
   misi: string[]
   tujuan: string[]
+  photos?: string[]
+}
+
+const KG_PHOTOS = ['/images/kids-growth/kg-05.webp', '/images/kids-growth/kg-08.webp', '/images/kids-growth/kg-20.webp', '/images/kids-growth/kg-03.webp']
+
+function PhotoStrip({ photos }: { photos: string[] }) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
+      {photos.map((src, i) => (
+        <div key={src} className="overflow-hidden rounded-[18px] shadow-md group aspect-[4/3]">
+          <img src={src} alt={`Dokumentasi kegiatan ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </div>
+      ))}
+    </div>
+  )
 }
 
 const SHARED_VISI = 'Terwujudnya generasi berprofil kelulusan yang berorientasi pada cerdas literasi dan inovatif.'
@@ -82,6 +97,7 @@ const EDU_UNITS: Record<string, EduUnit> = {
   tpa: {
     name: 'PAUD - TPA Zalfa Naqiyya (Daycare)',
     usia: '1 – 7 Tahun',
+    photos: ['/images/paud/paud-30.webp', '/images/paud/paud-10.webp', '/images/paud/paud-57.webp'],
     visi: 'Terwujudnya layanan pengasuhan dan pendidikan anak usia dini yang aman, nyaman, islami, serta mendukung tumbuh kembang anak secara optimal.',
     misi: [
       'Memberikan layanan pengasuhan yang aman, nyaman, dan penuh kasih sayang.',
@@ -102,6 +118,7 @@ const EDU_UNITS: Record<string, EduUnit> = {
     name: 'PAUD - KB Zalfa Naqiyya',
     usia: '2 – 4 Tahun',
     izin: ['Terakreditasi B', 'NIS: 00.495.0', 'NSS: 002.64.72.000.006.024', 'NPSN: 69899063'],
+    photos: ['/images/paud/paud-55.webp', '/images/paud/paud-20.webp', '/images/paud/paud-40.webp'],
     visi: SHARED_VISI,
     misi: SHARED_MISI,
     tujuan: SHARED_TUJUAN,
@@ -110,6 +127,7 @@ const EDU_UNITS: Record<string, EduUnit> = {
     name: 'PAUD - TK Alif Zalfa Naqiyya',
     usia: '4 – 6 Tahun',
     izin: ['NIS: 00.579.0', 'NSS: 002.64.72.050.006.029', 'NPSN: 70060184'],
+    photos: ['/images/paud/paud-50.webp', '/images/paud/paud-60.webp', '/images/paud/paud-67.webp'],
     visi: SHARED_VISI,
     misi: SHARED_MISI,
     tujuan: SHARED_TUJUAN,
@@ -117,6 +135,7 @@ const EDU_UNITS: Record<string, EduUnit> = {
   bimbel: {
     name: 'Bimbingan Belajar Zalfa Naqiyya',
     usia: '4 – 7 Tahun',
+    photos: ['/images/paud/paud-35.webp', '/images/paud/paud-45.webp', '/images/paud/paud-25.webp'],
     visi: 'Terwujudnya peserta didik yang unggul dalam kemampuan akademik, literasi, karakter, dan keterampilan belajar kreatif.',
     misi: [
       'Membantu peserta didik memahami materi pembelajaran sesuai tahap perkembangan dan kebutuhan belajar.',
@@ -169,7 +188,7 @@ function InfoCard({
   )
 }
 
-function PsikologiPanel() {
+function PsikologiPanel({ kgPhotos }: { kgPhotos: string[] }) {
   return (
     <div className="flex flex-col gap-12">
       <div className="text-center max-w-2xl mx-auto">
@@ -203,11 +222,17 @@ function PsikologiPanel() {
         <InfoCard icon="self_improvement" title="Self Healing Activity" desc="Kegiatan reflektif dan kreatif untuk kesejahteraan mental." items={SELF_HEALING} cta="Hubungi Kami" />
         <InfoCard icon="more_horiz" title="Other Related Services" desc="Layanan edukatif dan kolaboratif dalam konteks yang lebih luas." items={OTHER_SERVICES} cta="Hubungi Kami" />
       </div>
+
+      {/* Kids Growth documentation */}
+      <div className="flex flex-col gap-4">
+        <h3 className="text-xl font-semibold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Dokumentasi Kids Growth Program</h3>
+        <PhotoStrip photos={kgPhotos} />
+      </div>
     </div>
   )
 }
 
-function EduPanel({ unit }: { unit: EduUnit }) {
+function EduPanel({ unit, photos }: { unit: EduUnit; photos: string[] }) {
   return (
     <div className="flex flex-col gap-10">
       {/* Header */}
@@ -255,6 +280,13 @@ function EduPanel({ unit }: { unit: EduUnit }) {
         ))}
       </div>
 
+      {photos.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xl font-semibold text-[#1d1c17]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Dokumentasi Kegiatan</h3>
+          <PhotoStrip photos={photos} />
+        </div>
+      )}
+
       <div className="text-center">
         <Link href="/#kontak" className="bg-[#006a6a] text-white px-8 py-3 rounded-[24px] text-sm font-semibold hover:bg-[#5cb2b2] transition-all shadow-md inline-flex items-center gap-2">
           Hubungi Kami untuk biaya &amp; pendaftaran <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -264,8 +296,13 @@ function EduPanel({ unit }: { unit: EduUnit }) {
   )
 }
 
-export default function ServiceTabs() {
+export default function ServiceTabs({ docsByCategory = {} }: { docsByCategory?: Record<string, string[]> }) {
   const [active, setActive] = useState('psikologi')
+
+  const nonEmpty = (arr?: string[]) => (arr && arr.length > 0 ? arr : undefined)
+  const kgPhotos = nonEmpty(docsByCategory['kids-growth']) ?? KG_PHOTOS
+  const eduPhotos = (catId: string) =>
+    nonEmpty(docsByCategory[catId]) ?? nonEmpty(docsByCategory['paud']) ?? EDU_UNITS[catId]?.photos ?? []
 
   return (
     <div className="flex flex-col gap-12 md:gap-16">
@@ -287,7 +324,7 @@ export default function ServiceTabs() {
       </div>
 
       {/* PANEL */}
-      {active === 'psikologi' ? <PsikologiPanel /> : <EduPanel unit={EDU_UNITS[active]} />}
+      {active === 'psikologi' ? <PsikologiPanel kgPhotos={kgPhotos} /> : <EduPanel unit={EDU_UNITS[active]} photos={eduPhotos(active)} />}
     </div>
   )
 }

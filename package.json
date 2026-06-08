@@ -7,6 +7,7 @@
     "build": "prisma migrate deploy && prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
+    "seed:docs": "npx tsx scripts/seed-documentation.ts",
     "postinstall": "prisma generate --schema=./prisma/schema.prisma"
   },
   "dependencies": {

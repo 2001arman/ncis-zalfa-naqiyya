@@ -1,9 +1,25 @@
 import type { Metadata } from 'next'
+import prisma from '@/lib/prisma'
 import ServiceTabs from '@/components/services/ServiceTabs'
 
 export const metadata: Metadata = { title: 'Layanan & Harga – Zalfa Naqiyya' }
 
-export default function LayananPage() {
+export const dynamic = 'force-dynamic'
+
+export default async function LayananPage() {
+  const docs = await prisma.documentation
+    .findMany({
+      where: { published: true },
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+      select: { imageUrl: true, category: true },
+    })
+    .catch(() => [])
+
+  const docsByCategory: Record<string, string[]> = {}
+  for (const d of docs) {
+    ;(docsByCategory[d.category] ??= []).push(d.imageUrl)
+  }
+
   return (
     <div className="bg-[#fef9f1] text-[#1d1c17] overflow-x-hidden min-h-screen">
 
@@ -19,7 +35,7 @@ export default function LayananPage() {
 
       {/* MAIN */}
       <main className="flex-grow w-full max-w-[1200px] mx-auto px-5 md:px-6 py-12 md:py-20 relative z-10 -mt-8 md:-mt-12" style={{ backgroundImage: 'radial-gradient(rgba(92,178,178,0.1) 2px, transparent 2px)', backgroundSize: '30px 30px' }}>
-        <ServiceTabs />
+        <ServiceTabs docsByCategory={docsByCategory} />
       </main>
     </div>
   )

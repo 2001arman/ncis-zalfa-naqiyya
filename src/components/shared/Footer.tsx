@@ -3,6 +3,9 @@ export default function Footer() {
     <footer className="bg-[#5CB2B2] text-white text-sm leading-relaxed w-full rounded-t-[48px] mt-20 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]" style={{ fontFamily: 'Plus Jakarta Sans' }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 px-6 py-12 md:px-16 lg:px-24 max-w-7xl mx-auto">
         <div className="space-y-4">
+          <div className="bg-white/95 rounded-2xl p-3 inline-block shadow-sm">
+            <img src="/images/logo/logo.webp" alt="Zalfa Naqiyya Psychology Center" className="h-16 w-auto" />
+          </div>
           <div className="text-2xl font-black italic">Zalfa Naqiyya</div>
           <p className="text-teal-50/80 text-xs" style={{ fontFamily: 'Inter' }}>Bagian dari Yayasan Prima Nusantara Jaya</p>
         </div>

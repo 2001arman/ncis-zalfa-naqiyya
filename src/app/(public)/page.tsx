@@ -5,8 +5,21 @@ import ConsultationForm from '@/components/forms/ConsultationForm'
 
 export const dynamic = 'force-dynamic'
 
+const FALLBACK_GALLERY = [
+  '/images/kids-growth/kg-05.webp',
+  '/images/paud/paud-57.webp',
+  '/images/kids-growth/kg-08.webp',
+  '/images/paud/paud-30.webp',
+  '/images/paud/paud-10.webp',
+  '/images/kids-growth/kg-20.webp',
+  '/images/paud/paud-55.webp',
+  '/images/kids-growth/kg-03.webp',
+]
+
 export default async function HomePage() {
   const articles = await prisma.post.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' }, take: 3 }).catch(() => [])
+  const galleryDocs = await prisma.documentation.findMany({ where: { published: true }, orderBy: [{ order: 'asc' }, { createdAt: 'desc' }], take: 8, select: { imageUrl: true } }).catch(() => [])
+  const galleryImages = galleryDocs.length > 0 ? galleryDocs.map((d) => d.imageUrl) : FALLBACK_GALLERY
 
   return (
     <div className="bg-[#FDF8F0] text-[#1d1c17] overflow-x-hidden">
@@ -44,7 +57,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="relative h-[280px] sm:h-[380px] lg:h-[500px] w-full rounded-[32px] md:rounded-[48px] overflow-hidden shadow-xl rotate-2 hover:rotate-0 transition-transform duration-500 bg-[#f2ede5]">
-            <img alt="Parent and child" className="w-full h-full object-cover" src="https://images.pexels.com/photos/8537196/pexels-photo-8537196.jpeg" />
+            <img alt="Kegiatan anak Zalfa Naqiyya" className="w-full h-full object-cover" src="/images/paud/paud-55.webp" />
           </div>
         </div>
       </section>
@@ -83,7 +96,7 @@ export default async function HomePage() {
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
               <div className="w-16 h-8 bg-[#e7e2da] rounded-full border-4 border-white shadow-sm" />
             </div>
-            <img alt="About" className="w-full h-full object-cover" src="https://images.pexels.com/photos/29582130/pexels-photo-29582130.jpeg" />
+            <img alt="Tentang Zalfa Naqiyya" className="w-full h-full object-cover" src="/images/kids-growth/kg-05.webp" />
           </div>
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-[#006a6a]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Tentang Kami</h2>
@@ -189,9 +202,9 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { tag: 'Self-Healing', title: 'Pentingnya Menciptakan "Ruang Aman" bagi Tumbuh Kembang Anak', desc: 'Lingkungan yang suportif sangat krusial dalam membentuk resiliensi mental anak sejak dini.', tagBg: 'bg-[#D8CCE8]', tagTc: 'text-[#593d5c]', img: 'https://images.pexels.com/photos/8105118/pexels-photo-8105118.jpeg' },
-                { tag: 'Kids Growth', title: 'Mengenal Terapi Bermain: Solusi Ceria Atasi Kecemasan Anak', desc: 'Bermain bukan sekadar hiburan, melainkan bahasa natural anak dalam mengekspresikan emosi.', tagBg: 'bg-[#F2D086]', tagTc: 'text-[#1d1c17]', img: 'https://images.pexels.com/photos/3662667/pexels-photo-3662667.jpeg' },
-                { tag: 'Tips Psikologi', title: 'Teknik Sederhana Manajemen Stres untuk Orang Tua Milenial', desc: 'Menjaga kewarasan orang tua adalah langkah pertama sebelum mendampingi anak bertumbuh.', tagBg: 'bg-[#B2C9B2]', tagTc: 'text-[#004f50]', img: 'https://images.pexels.com/photos/3184416/pexels-photo-3184416.jpeg' },
+                { tag: 'Self-Healing', title: 'Pentingnya Menciptakan "Ruang Aman" bagi Tumbuh Kembang Anak', desc: 'Lingkungan yang suportif sangat krusial dalam membentuk resiliensi mental anak sejak dini.', tagBg: 'bg-[#D8CCE8]', tagTc: 'text-[#593d5c]', img: '/images/kids-growth/kg-20.webp' },
+                { tag: 'Kids Growth', title: 'Mengenal Terapi Bermain: Solusi Ceria Atasi Kecemasan Anak', desc: 'Bermain bukan sekadar hiburan, melainkan bahasa natural anak dalam mengekspresikan emosi.', tagBg: 'bg-[#F2D086]', tagTc: 'text-[#1d1c17]', img: '/images/kids-growth/kg-08.webp' },
+                { tag: 'Tips Psikologi', title: 'Teknik Sederhana Manajemen Stres untuk Orang Tua Milenial', desc: 'Menjaga kewarasan orang tua adalah langkah pertama sebelum mendampingi anak bertumbuh.', tagBg: 'bg-[#B2C9B2]', tagTc: 'text-[#004f50]', img: '/images/paud/paud-57.webp' },
               ].map(a => (
                 <div key={a.title} className="bg-white rounded-[32px] overflow-hidden shadow-md group cursor-pointer border border-[#ece8e0]">
                   <div className="h-48 overflow-hidden"><img alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={a.img} /></div>
@@ -204,6 +217,26 @@ export default async function HomePage() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* GALLERY */}
+      <section className="py-12 md:py-20 px-5 md:px-6 bg-white">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#a7344d] inline-block relative" style={{ fontFamily: 'Plus Jakarta Sans' }}>
+              Galeri Kegiatan
+              <svg className="absolute -bottom-3 left-0 w-full h-4 text-[#F2D086] opacity-60 z-[-1]" preserveAspectRatio="none" viewBox="0 0 100 20"><path d="M0 10 Q 25 0 50 10 T 100 10" fill="none" stroke="currentColor" strokeWidth="6" /></svg>
+            </h2>
+            <p className="text-[#3e4948] mt-4 max-w-2xl mx-auto">Momen tumbuh kembang dan keceriaan anak-anak dalam program Kids Growth serta PAUD Zalfa Naqiyya.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {galleryImages.map((src, i) => (
+              <div key={src} className="overflow-hidden rounded-[20px] md:rounded-[28px] shadow-md group aspect-square">
+                <img src={src} alt={`Galeri kegiatan ${i + 1}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

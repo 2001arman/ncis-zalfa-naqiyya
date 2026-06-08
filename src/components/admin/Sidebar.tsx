@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: '📊' },
   { label: 'Artikel', href: '/dashboard/posts', icon: '✏️' },
+  { label: 'Dokumentasi', href: '/dashboard/documentation', icon: '🖼️' },
   { label: 'Konsultasi', href: '/dashboard/consultations', icon: '📋' },
 ]
 

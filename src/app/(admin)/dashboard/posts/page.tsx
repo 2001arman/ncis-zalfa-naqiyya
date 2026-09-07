@@ -4,6 +4,7 @@ import { deletePost } from '@/lib/actions/post.actions'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import DeleteButton from '@/components/admin/DeleteButton'
+import Toast from '@/components/ui/Toast'
 import { formatDate } from '@/lib/utils'
 import type { Metadata } from 'next'
 
@@ -13,7 +14,21 @@ export const metadata: Metadata = {
   title: 'Artikel – Zalfa Naqiyya Admin',
 }
 
-export default async function PostsPage() {
+const STATUS_NOTICES: Record<string, { kind: 'success' | 'error'; text: string }> = {
+  created: { kind: 'success', text: 'Artikel berhasil dibuat.' },
+  updated: { kind: 'success', text: 'Artikel berhasil diperbarui.' },
+  deleted: { kind: 'success', text: 'Artikel berhasil dihapus.' },
+  'delete-failed': { kind: 'error', text: 'Gagal menghapus artikel. Coba lagi.' },
+}
+
+interface Props {
+  searchParams: Promise<{ status?: string }>
+}
+
+export default async function PostsPage({ searchParams }: Props) {
+  const { status } = await searchParams
+  const notice = status ? STATUS_NOTICES[status] : undefined
+
   const posts = await prisma.post.findMany({
     orderBy: { updatedAt: 'desc' },
     select: {
@@ -28,6 +43,8 @@ export default async function PostsPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      {notice && <Toast kind={notice.kind} text={notice.text} stripQueryParam="status" />}
+
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-heading text-2xl font-bold text-text mb-1">Artikel</h1>

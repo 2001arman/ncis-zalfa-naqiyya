@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function NewPostPage() {
   return (
-    <div className="flex flex-col gap-6 max-w-3xl">
+    <div className="flex flex-col gap-6 w-full">
       <div>
         <h1 className="font-heading text-2xl font-bold text-text mb-1">Artikel Baru</h1>
         <p className="text-sm font-body text-text-muted">

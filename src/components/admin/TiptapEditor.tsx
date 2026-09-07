@@ -1,6 +1,6 @@
 'use client'
 
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, useEditorState, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { cn } from '@/lib/utils'
 
@@ -24,6 +24,27 @@ export default function TiptapEditor({ name, defaultValue = '', className }: Tip
         ].join(' '),
       },
     },
+  })
+
+  /**
+   * Tiptap v3 no longer re-renders the component on every transaction
+   * (`shouldRerenderOnTransaction` defaults to false), so reading
+   * `editor.getHTML()` during render would keep returning the *initial* HTML
+   * and the hidden input below would submit stale/empty content.
+   * `useEditorState` subscribes to exactly the slices we render.
+   */
+  const editorState = useEditorState({
+    editor,
+    selector: ({ editor: e }) => ({
+      html: !e || e.isEmpty ? '' : e.getHTML(),
+      isH2: !!e?.isActive('heading', { level: 2 }),
+      isH3: !!e?.isActive('heading', { level: 3 }),
+      isBold: !!e?.isActive('bold'),
+      isItalic: !!e?.isActive('italic'),
+      isBulletList: !!e?.isActive('bulletList'),
+      isOrderedList: !!e?.isActive('orderedList'),
+      isBlockquote: !!e?.isActive('blockquote'),
+    }),
   })
 
   const toolbarBtn = (
@@ -55,13 +76,13 @@ export default function TiptapEditor({ name, defaultValue = '', className }: Tip
     <div className={cn('rounded-scrapbook border border-surface-dim overflow-hidden', className)}>
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-1 px-3 py-2 border-b border-surface-dim bg-surface-container">
-        {toolbarBtn('H2', () => editor?.chain().focus().toggleHeading({ level: 2 }).run(), editor?.isActive('heading', { level: 2 }))}
-        {toolbarBtn('H3', () => editor?.chain().focus().toggleHeading({ level: 3 }).run(), editor?.isActive('heading', { level: 3 }))}
-        {toolbarBtn('B', () => editor?.chain().focus().toggleBold().run(), editor?.isActive('bold'))}
-        {toolbarBtn('I', () => editor?.chain().focus().toggleItalic().run(), editor?.isActive('italic'))}
-        {toolbarBtn('• List', () => editor?.chain().focus().toggleBulletList().run(), editor?.isActive('bulletList'))}
-        {toolbarBtn('1. List', () => editor?.chain().focus().toggleOrderedList().run(), editor?.isActive('orderedList'))}
-        {toolbarBtn('Quote', () => editor?.chain().focus().toggleBlockquote().run(), editor?.isActive('blockquote'))}
+        {toolbarBtn('H2', () => editor?.chain().focus().toggleHeading({ level: 2 }).run(), editorState?.isH2)}
+        {toolbarBtn('H3', () => editor?.chain().focus().toggleHeading({ level: 3 }).run(), editorState?.isH3)}
+        {toolbarBtn('B', () => editor?.chain().focus().toggleBold().run(), editorState?.isBold)}
+        {toolbarBtn('I', () => editor?.chain().focus().toggleItalic().run(), editorState?.isItalic)}
+        {toolbarBtn('• List', () => editor?.chain().focus().toggleBulletList().run(), editorState?.isBulletList)}
+        {toolbarBtn('1. List', () => editor?.chain().focus().toggleOrderedList().run(), editorState?.isOrderedList)}
+        {toolbarBtn('Quote', () => editor?.chain().focus().toggleBlockquote().run(), editorState?.isBlockquote)}
         <div className="h-5 w-px bg-surface-dim mx-1" />
         {toolbarBtn('↩ Undo', () => editor?.chain().focus().undo().run())}
         {toolbarBtn('↪ Redo', () => editor?.chain().focus().redo().run())}
@@ -74,7 +95,7 @@ export default function TiptapEditor({ name, defaultValue = '', className }: Tip
       <input
         type="hidden"
         name={name}
-        value={editor?.getHTML() ?? ''}
+        value={editorState?.html ?? ''}
         readOnly
       />
     </div>

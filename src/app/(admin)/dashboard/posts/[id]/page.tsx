@@ -34,7 +34,7 @@ export default async function EditPostPage({ params }: Props) {
   const updatePostWithId = updatePost.bind(null, post.id)
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl">
+    <div className="flex flex-col gap-6 w-full">
       <div>
         <h1 className="font-heading text-2xl font-bold text-text mb-1">Edit Artikel</h1>
         <p className="text-sm font-body text-text-muted truncate">{post.title}</p>

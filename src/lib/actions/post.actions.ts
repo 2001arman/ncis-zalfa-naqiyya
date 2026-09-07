@@ -11,51 +11,124 @@ import { slugify } from '@/lib/utils'
 export interface PostFormState {
   success?: boolean
   message?: string
+  /** Field-level errors, keyed by input name. */
+  fieldErrors?: Record<string, string>
 }
 
 async function destroyCloudinary(publicId?: string | null) {
   if (!publicId) return
   try {
     await cloudinary.uploader.destroy(publicId)
-  } catch {
-    // best-effort — ignore failures
+  } catch (error) {
+    // best-effort — the DB write already succeeded, so only log it
+    console.error('[post.actions] cloudinary destroy failed', publicId, error)
   }
 }
 
-async function requireAdmin() {
+/**
+ * Resolves the logged-in admin. Returns `null` instead of redirecting so a
+ * server action can report "session expired" to the form and let the admin
+ * keep the draft they just typed.
+ */
+async function currentAdmin() {
   const session = await getServerSession(authOptions)
-  if (!session?.user) {
-    redirect('/login')
+  const email = session?.user?.email
+  if (!email) return null
+  return prisma.admin.findUnique({ where: { email }, select: { id: true } })
+}
+
+const SESSION_EXPIRED: PostFormState = {
+  message:
+    'Sesi login sudah berakhir. Buka /login di tab baru, login ulang, lalu tekan Simpan lagi — draf ini tidak hilang.',
+}
+
+/** Tiptap emits `<p></p>` for an empty document — treat that as no content. */
+function isBlankHtml(html: string): boolean {
+  if (/<(img|hr|iframe|video)\b/i.test(html)) return false
+  return (
+    html
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/gi, ' ')
+      .trim().length === 0
+  )
+}
+
+/**
+ * Builds a slug that does not collide with another post. `slug` is unique in
+ * the schema, so without this a second article sharing a title just fails.
+ */
+async function uniqueSlug(title: string, excludeId?: string): Promise<string> {
+  const base = slugify(title) || 'artikel'
+  let slug = base
+
+  for (let n = 2; n < 200; n++) {
+    const clash = await prisma.post.findUnique({ where: { slug }, select: { id: true } })
+    if (!clash || clash.id === excludeId) return slug
+    slug = `${base}-${n}`
   }
-  return session
+
+  return `${base}-${Date.now()}`
+}
+
+function parseForm(formData: FormData) {
+  return {
+    title: ((formData.get('title') as string) ?? '').trim(),
+    excerpt: ((formData.get('excerpt') as string) ?? '').trim(),
+    content: ((formData.get('content') as string) ?? '').trim(),
+    coverImage: ((formData.get('coverImage') as string) ?? '').trim(),
+    coverPublicId: ((formData.get('coverPublicId') as string) ?? '').trim(),
+    published: formData.get('published') === 'true',
+  }
+}
+
+function validate(title: string, content: string): PostFormState | null {
+  const fieldErrors: Record<string, string> = {}
+  if (!title) fieldErrors.title = 'Judul artikel wajib diisi.'
+  if (!content || isBlankHtml(content)) {
+    fieldErrors.content = 'Konten artikel masih kosong. Tulis isi artikel terlebih dahulu.'
+  }
+
+  if (Object.keys(fieldErrors).length === 0) return null
+
+  return {
+    message: Object.values(fieldErrors).join(' '),
+    fieldErrors,
+  }
+}
+
+/** Turns an unknown Prisma/runtime failure into a message the admin can act on. */
+function describeError(error: unknown, fallback: string): PostFormState {
+  const code = (error as { code?: string })?.code
+
+  if (code === 'P2002') {
+    return { message: 'Sudah ada artikel dengan judul (slug) yang sama. Ubah judulnya sedikit.' }
+  }
+  if (code === 'P2025') {
+    return { message: 'Artikel tidak ditemukan — mungkin sudah dihapus dari tab lain.' }
+  }
+  if (code === 'P1001' || code === 'P1017') {
+    return { message: 'Koneksi ke database terputus. Coba simpan lagi dalam beberapa detik.' }
+  }
+
+  const detail = error instanceof Error ? error.message : String(error)
+  return { message: `${fallback} (${detail})` }
 }
 
 export async function createPost(
   prevState: PostFormState,
   formData: FormData
 ): Promise<PostFormState> {
-  await requireAdmin()
+  const admin = await currentAdmin()
+  if (!admin) return SESSION_EXPIRED
 
-  const title = (formData.get('title') as string)?.trim()
-  const excerpt = (formData.get('excerpt') as string)?.trim()
-  const content = (formData.get('content') as string)?.trim()
-  const coverImage = (formData.get('coverImage') as string)?.trim()
-  const coverPublicId = (formData.get('coverPublicId') as string)?.trim()
-  const published = formData.get('published') === 'true'
+  const { title, excerpt, content, coverImage, coverPublicId, published } = parseForm(formData)
 
-  if (!title || !content) {
-    return { message: 'Judul dan konten wajib diisi.' }
-  }
+  const invalid = validate(title, content)
+  if (invalid) return invalid
 
-  const session = await getServerSession(authOptions)
-  const authorEmail = session!.user!.email!
-
-  const admin = await prisma.admin.findUnique({ where: { email: authorEmail } })
-  if (!admin) return { message: 'Admin tidak ditemukan.' }
-
-  const slug = slugify(title)
-
+  let slug: string
   try {
+    slug = await uniqueSlug(title)
     await prisma.post.create({
       data: {
         title,
@@ -68,12 +141,17 @@ export async function createPost(
         authorId: admin.id,
       },
     })
-  } catch {
-    return { message: 'Gagal menyimpan artikel. Judul mungkin sudah ada.' }
+  } catch (error) {
+    console.error('[post.actions] createPost failed', error)
+    return describeError(error, 'Gagal menyimpan artikel.')
   }
 
   revalidatePath('/artikel')
-  redirect('/dashboard/posts')
+  revalidatePath(`/artikel/${slug}`)
+  revalidatePath('/dashboard/posts')
+
+  // redirect() throws NEXT_REDIRECT — must stay outside the try/catch above.
+  redirect('/dashboard/posts?status=created')
 }
 
 export async function updatePost(
@@ -81,29 +159,27 @@ export async function updatePost(
   prevState: PostFormState,
   formData: FormData
 ): Promise<PostFormState> {
-  await requireAdmin()
+  const admin = await currentAdmin()
+  if (!admin) return SESSION_EXPIRED
 
-  const title = (formData.get('title') as string)?.trim()
-  const excerpt = (formData.get('excerpt') as string)?.trim()
-  const content = (formData.get('content') as string)?.trim()
-  const coverImage = (formData.get('coverImage') as string)?.trim()
-  const coverPublicId = (formData.get('coverPublicId') as string)?.trim()
-  const published = formData.get('published') === 'true'
+  const { title, excerpt, content, coverImage, coverPublicId, published } = parseForm(formData)
 
-  if (!title || !content) {
-    return { message: 'Judul dan konten wajib diisi.' }
+  const invalid = validate(title, content)
+  if (invalid) return invalid
+
+  const existing = await prisma.post.findUnique({
+    where: { id },
+    select: { coverPublicId: true, slug: true },
+  })
+  if (!existing) {
+    return { message: 'Artikel tidak ditemukan — mungkin sudah dihapus.' }
   }
 
-  const slug = slugify(title)
-
-  // Destroy the previous cover if it changed/was removed.
-  const existing = await prisma.post.findUnique({ where: { id }, select: { coverPublicId: true } })
   const newPublicId = coverPublicId || null
-  if (existing?.coverPublicId && existing.coverPublicId !== newPublicId) {
-    await destroyCloudinary(existing.coverPublicId)
-  }
 
+  let slug: string
   try {
+    slug = await uniqueSlug(title, id)
     await prisma.post.update({
       where: { id },
       data: {
@@ -116,26 +192,41 @@ export async function updatePost(
         published,
       },
     })
-  } catch {
-    return { message: 'Gagal memperbarui artikel.' }
+  } catch (error) {
+    console.error('[post.actions] updatePost failed', id, error)
+    return describeError(error, 'Gagal memperbarui artikel.')
+  }
+
+  // Only drop the old Cloudinary asset once the DB write actually succeeded.
+  if (existing.coverPublicId && existing.coverPublicId !== newPublicId) {
+    await destroyCloudinary(existing.coverPublicId)
   }
 
   revalidatePath('/artikel')
   revalidatePath('/dashboard/posts')
   revalidatePath(`/artikel/${slug}`)
+  if (existing.slug !== slug) revalidatePath(`/artikel/${existing.slug}`)
 
   return { success: true, message: 'Artikel berhasil diperbarui.' }
 }
 
 export async function deletePost(id: string): Promise<void> {
-  await requireAdmin()
+  const admin = await currentAdmin()
+  if (!admin) redirect('/login')
 
-  const post = await prisma.post.findUnique({ where: { id }, select: { coverPublicId: true } })
+  let coverPublicId: string | null = null
+  try {
+    const post = await prisma.post.findUnique({ where: { id }, select: { coverPublicId: true } })
+    coverPublicId = post?.coverPublicId ?? null
+    await prisma.post.delete({ where: { id } })
+  } catch (error) {
+    console.error('[post.actions] deletePost failed', id, error)
+    redirect('/dashboard/posts?status=delete-failed')
+  }
 
-  await prisma.post.delete({ where: { id } })
-
-  await destroyCloudinary(post?.coverPublicId)
+  await destroyCloudinary(coverPublicId)
 
   revalidatePath('/artikel')
   revalidatePath('/dashboard/posts')
+  redirect('/dashboard/posts?status=deleted')
 }

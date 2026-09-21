@@ -7,6 +7,7 @@ import { authOptions } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { slugify } from '@/lib/utils'
+import { cldPublicIdsInHtml } from '@/lib/cld-url'
 
 export interface PostFormState {
   success?: boolean
@@ -22,6 +23,20 @@ async function destroyCloudinary(publicId?: string | null) {
   } catch (error) {
     // best-effort — the DB write already succeeded, so only log it
     console.error('[post.actions] cloudinary destroy failed', publicId, error)
+  }
+}
+
+/**
+ * Drops Cloudinary assets that no post references any more — covers plus the
+ * images embedded in article HTML. Always call this *after* the DB write, so
+ * an asset the saved post still uses is counted as in use and survives.
+ */
+async function destroyOrphanedAssets(publicIds: (string | null | undefined)[]) {
+  for (const publicId of new Set(publicIds.filter((id): id is string => !!id))) {
+    const stillReferenced = await prisma.post.count({
+      where: { OR: [{ coverPublicId: publicId }, { content: { contains: publicId } }] },
+    })
+    if (stillReferenced === 0) await destroyCloudinary(publicId)
   }
 }
 
@@ -78,6 +93,12 @@ function parseForm(formData: FormData) {
     coverImage: ((formData.get('coverImage') as string) ?? '').trim(),
     coverPublicId: ((formData.get('coverPublicId') as string) ?? '').trim(),
     published: formData.get('published') === 'true',
+    // Images uploaded from inside the editor during this session — any the
+    // admin inserted then deleted again would otherwise leak in Cloudinary.
+    contentUploads: ((formData.get('contentUploads') as string) ?? '')
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean),
   }
 }
 
@@ -121,7 +142,8 @@ export async function createPost(
   const admin = await currentAdmin()
   if (!admin) return SESSION_EXPIRED
 
-  const { title, excerpt, content, coverImage, coverPublicId, published } = parseForm(formData)
+  const { title, excerpt, content, coverImage, coverPublicId, published, contentUploads } =
+    parseForm(formData)
 
   const invalid = validate(title, content)
   if (invalid) return invalid
@@ -146,6 +168,8 @@ export async function createPost(
     return describeError(error, 'Gagal menyimpan artikel.')
   }
 
+  await destroyOrphanedAssets(contentUploads)
+
   revalidatePath('/artikel')
   revalidatePath(`/artikel/${slug}`)
   revalidatePath('/dashboard/posts')
@@ -162,14 +186,15 @@ export async function updatePost(
   const admin = await currentAdmin()
   if (!admin) return SESSION_EXPIRED
 
-  const { title, excerpt, content, coverImage, coverPublicId, published } = parseForm(formData)
+  const { title, excerpt, content, coverImage, coverPublicId, published, contentUploads } =
+    parseForm(formData)
 
   const invalid = validate(title, content)
   if (invalid) return invalid
 
   const existing = await prisma.post.findUnique({
     where: { id },
-    select: { coverPublicId: true, slug: true },
+    select: { coverPublicId: true, slug: true, content: true },
   })
   if (!existing) {
     return { message: 'Artikel tidak ditemukan — mungkin sudah dihapus.' }
@@ -197,10 +222,13 @@ export async function updatePost(
     return describeError(error, 'Gagal memperbarui artikel.')
   }
 
-  // Only drop the old Cloudinary asset once the DB write actually succeeded.
-  if (existing.coverPublicId && existing.coverPublicId !== newPublicId) {
-    await destroyCloudinary(existing.coverPublicId)
-  }
+  // Only drop Cloudinary assets once the DB write actually succeeded: the old
+  // cover, images dropped from the body, and uploads that never got inserted.
+  await destroyOrphanedAssets([
+    existing.coverPublicId,
+    ...cldPublicIdsInHtml(existing.content),
+    ...contentUploads,
+  ])
 
   revalidatePath('/artikel')
   revalidatePath('/dashboard/posts')
@@ -214,17 +242,20 @@ export async function deletePost(id: string): Promise<void> {
   const admin = await currentAdmin()
   if (!admin) redirect('/login')
 
-  let coverPublicId: string | null = null
+  let assets: (string | null)[] = []
   try {
-    const post = await prisma.post.findUnique({ where: { id }, select: { coverPublicId: true } })
-    coverPublicId = post?.coverPublicId ?? null
+    const post = await prisma.post.findUnique({
+      where: { id },
+      select: { coverPublicId: true, content: true },
+    })
+    assets = [post?.coverPublicId ?? null, ...cldPublicIdsInHtml(post?.content ?? '')]
     await prisma.post.delete({ where: { id } })
   } catch (error) {
     console.error('[post.actions] deletePost failed', id, error)
     redirect('/dashboard/posts?status=delete-failed')
   }
 
-  await destroyCloudinary(coverPublicId)
+  await destroyOrphanedAssets(assets)
 
   revalidatePath('/artikel')
   revalidatePath('/dashboard/posts')

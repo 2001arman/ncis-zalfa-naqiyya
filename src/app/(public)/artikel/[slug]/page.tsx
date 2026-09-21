@@ -3,6 +3,8 @@ import Link from 'next/link'
 import prisma from '@/lib/prisma'
 import { formatDate } from '@/lib/utils'
 import { cldUrl } from '@/lib/cld-url'
+import { prepareArticleHtml } from '@/lib/article-html'
+import ArticleContent from '@/components/shared/ArticleContent'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -90,14 +92,16 @@ export default async function ArtikelDetailPage({ params }: Props) {
           )}
 
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none text-[16px] md:text-[18px] text-[#404944] leading-[1.8] font-normal 
+          <ArticleContent
+            className="prose prose-lg max-w-none text-[16px] md:text-[18px] text-[#404944] leading-[1.8] font-normal 
                prose-headings:text-[#2b6955] prose-headings:font-bold prose-headings:font-['Plus_Jakarta_Sans']
                prose-a:text-[#5CB2B2] 
                prose-blockquote:bg-[#B2C9B2]/20 prose-blockquote:border-[#5CB2B2] prose-blockquote:text-[#404944] prose-blockquote:italic prose-blockquote:rounded-r-2xl prose-blockquote:p-6 prose-blockquote:border-l-4 prose-blockquote:my-8
-               prose-li:marker:text-[#5CB2B2]"
+               prose-li:marker:text-[#5CB2B2]
+               prose-img:rounded-[24px] prose-img:shadow-md prose-img:my-10 prose-img:mx-auto"
             style={{ fontFamily: 'Inter' }}
-            dangerouslySetInnerHTML={{ __html: post.content }}>
-          </div>
+            html={prepareArticleHtml(post.content)}
+          />
         </article>
 
         {/* Artikel Lainnya */}

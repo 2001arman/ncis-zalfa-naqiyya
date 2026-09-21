@@ -1,12 +1,12 @@
 'use client'
 
 import { useActionState, useCallback, useEffect, useRef, useState } from 'react'
-import TiptapEditor from '@/components/admin/TiptapEditor'
+import TiptapEditor, { type EditorNotice } from '@/components/admin/TiptapEditor'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Toast from '@/components/ui/Toast'
 import Image from 'next/image'
-import { compressImage } from '@/lib/compress-image'
+import { uploadImage } from '@/lib/upload-image'
 import type { PostFormState } from '@/lib/actions/post.actions'
 
 interface PostEditorProps {
@@ -21,7 +21,7 @@ interface PostEditorProps {
   }
 }
 
-type Notice = { kind: 'success' | 'error'; text: string }
+type Notice = EditorNotice
 
 export default function PostEditor({ formAction, initialData }: PostEditorProps) {
   const [state, action, pending] = useActionState(formAction, {})
@@ -73,38 +73,9 @@ export default function PostEditor({ formAction, initialData }: PostEditorProps)
 
     setUploading(true)
     try {
-      const file = await compressImage(rawFile)
-
-      // Get signed upload params from our API route
-      const sigRes = await fetch('/api/upload', { method: 'POST' })
-      if (!sigRes.ok) {
-        throw new Error(
-          sigRes.status === 401
-            ? 'Sesi login sudah berakhir. Login ulang lalu coba lagi.'
-            : `Gagal meminta izin unggah (HTTP ${sigRes.status}).`
-        )
-      }
-      const { signature, timestamp, cloudName, apiKey } = await sigRes.json()
-
-      const fd = new FormData()
-      fd.append('file', file)
-      fd.append('signature', signature)
-      fd.append('timestamp', timestamp.toString())
-      fd.append('api_key', apiKey)
-      fd.append('folder', 'zalfa-naqiyya')
-
-      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-        method: 'POST',
-        body: fd,
-      })
-      const data = await uploadRes.json()
-
-      if (!data.secure_url) {
-        throw new Error(data?.error?.message ?? 'Cloudinary menolak gambar ini.')
-      }
-
-      setCoverPreview(data.secure_url)
-      setCoverPublicId(data.public_id ?? '')
+      const { url, publicId } = await uploadImage(rawFile)
+      setCoverPreview(url)
+      setCoverPublicId(publicId)
       showToast({ kind: 'success', text: 'Gambar cover berhasil diunggah.' })
     } catch (error) {
       showToast({
@@ -198,7 +169,11 @@ export default function PostEditor({ formAction, initialData }: PostEditorProps)
       {/* Content */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-text font-body">Konten Artikel</label>
-        <TiptapEditor name="content" defaultValue={initialData?.content} />
+        <TiptapEditor
+          name="content"
+          defaultValue={initialData?.content}
+          onNotice={showToast}
+        />
         {state.fieldErrors?.content && (
           <p className="text-xs text-secondary font-body">{state.fieldErrors.content}</p>
         )}

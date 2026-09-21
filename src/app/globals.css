@@ -124,3 +124,69 @@ body {
   background-image: radial-gradient(rgba(92, 178, 178, 0.1) 2px, transparent 2px);
   background-size: 30px 30px;
 }
+
+/* ── Tiptap image resize ────────────────────────────────────────────────────
+   @tiptap/extension-image renders bare, unstyled handle divs, so the visuals
+   and cursors come from here. Structure:
+   [data-resize-container] > [data-resize-wrapper] > img + [data-resize-handle] */
+.ProseMirror [data-resize-container][data-node='image'] {
+  max-width: 100%;
+  margin: 1.5rem 0;
+}
+
+.ProseMirror [data-resize-wrapper] {
+  max-width: 100%;
+}
+
+.ProseMirror [data-resize-wrapper] img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.ProseMirror [data-resize-handle] {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 2px solid var(--color-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  touch-action: none;
+}
+
+/* Handles sit on the corner rather than just inside it */
+.ProseMirror [data-resize-handle^='top'] {
+  margin-top: -7px;
+}
+.ProseMirror [data-resize-handle*='bottom'] {
+  margin-bottom: -7px;
+}
+.ProseMirror [data-resize-handle*='left'] {
+  margin-left: -7px;
+}
+.ProseMirror [data-resize-handle*='right'] {
+  margin-right: -7px;
+}
+
+.ProseMirror [data-resize-handle='top-left'],
+.ProseMirror [data-resize-handle='bottom-right'] {
+  cursor: nwse-resize;
+}
+.ProseMirror [data-resize-handle='top-right'],
+.ProseMirror [data-resize-handle='bottom-left'] {
+  cursor: nesw-resize;
+}
+
+.ProseMirror [data-resize-wrapper]:hover [data-resize-handle],
+.ProseMirror [data-resize-container].ProseMirror-selectednode [data-resize-handle] {
+  opacity: 1;
+}
+
+.ProseMirror [data-resize-container].ProseMirror-selectednode img,
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

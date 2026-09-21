@@ -5,7 +5,7 @@ import { useEditor, useEditorState, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import ImageExtension from '@tiptap/extension-image'
 import { cn } from '@/lib/utils'
-import { uploadImage } from '@/lib/upload-image'
+import { uploadImage, uploadErrorMessage } from '@/lib/upload-image'
 import ImageCropDialog from '@/components/admin/ImageCropDialog'
 
 export interface EditorNotice {
@@ -93,6 +93,9 @@ export default function TiptapEditor({
 
       setUploadingCount((n) => n + files.length)
       let inserted = 0
+      // Collected rather than reported one by one: a single toast is visible at
+      // a time, so per-file alerts would overwrite each other in a batch.
+      const failures: string[] = []
 
       for (const file of files) {
         try {
@@ -105,13 +108,21 @@ export default function TiptapEditor({
             .run()
           inserted++
         } catch (error) {
-          onNotice?.({
-            kind: 'error',
-            text: `Gagal mengunggah gambar. ${error instanceof Error ? error.message : ''}`.trim(),
-          })
+          failures.push(uploadErrorMessage(error, file.name))
         } finally {
           setUploadingCount((n) => n - 1)
         }
+      }
+
+      if (failures.length > 0) {
+        onNotice?.({
+          kind: 'error',
+          text:
+            failures.length === 1
+              ? failures[0]
+              : `${failures.length} gambar gagal diunggah. ${failures.join(' ')}`,
+        })
+        return
       }
 
       if (inserted > 0) {

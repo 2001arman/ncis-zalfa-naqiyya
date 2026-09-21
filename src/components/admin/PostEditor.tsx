@@ -6,7 +6,7 @@ import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Toast from '@/components/ui/Toast'
 import Image from 'next/image'
-import { uploadImage } from '@/lib/upload-image'
+import { uploadImage, uploadErrorMessage } from '@/lib/upload-image'
 import type { PostFormState } from '@/lib/actions/post.actions'
 
 interface PostEditorProps {
@@ -78,10 +78,7 @@ export default function PostEditor({ formAction, initialData }: PostEditorProps)
       setCoverPublicId(publicId)
       showToast({ kind: 'success', text: 'Gambar cover berhasil diunggah.' })
     } catch (error) {
-      showToast({
-        kind: 'error',
-        text: `Gagal mengunggah gambar. ${error instanceof Error ? error.message : ''}`.trim(),
-      })
+      showToast({ kind: 'error', text: uploadErrorMessage(error, rawFile.name) })
     } finally {
       setUploading(false)
       e.target.value = '' // allow re-picking the same file after a failure

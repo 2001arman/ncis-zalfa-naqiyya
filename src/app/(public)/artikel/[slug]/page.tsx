@@ -98,7 +98,8 @@ export default async function ArtikelDetailPage({ params }: Props) {
                prose-a:text-[#5CB2B2] 
                prose-blockquote:bg-[#B2C9B2]/20 prose-blockquote:border-[#5CB2B2] prose-blockquote:text-[#404944] prose-blockquote:italic prose-blockquote:rounded-r-2xl prose-blockquote:p-6 prose-blockquote:border-l-4 prose-blockquote:my-8
                prose-li:marker:text-[#5CB2B2]
-               prose-img:rounded-[24px] prose-img:shadow-md prose-img:my-10 prose-img:mx-auto"
+               prose-img:rounded-[24px] prose-img:shadow-md prose-img:my-10 prose-img:mx-auto
+               break-words prose-a:break-all prose-pre:overflow-x-auto"
             style={{ fontFamily: 'Inter' }}
             html={prepareArticleHtml(post.content)}
           />

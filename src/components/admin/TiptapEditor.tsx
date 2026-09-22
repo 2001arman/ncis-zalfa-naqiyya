@@ -61,6 +61,7 @@ export default function TiptapEditor({
       attributes: {
         class: [
           'min-h-[320px] px-5 py-4 outline-none font-body text-text prose prose-stone max-w-none',
+          'break-words prose-a:break-all prose-pre:overflow-x-auto',
           'prose-headings:font-heading prose-headings:text-text',
           'prose-p:text-text-muted prose-p:leading-relaxed',
           'prose-img:rounded-2xl prose-img:my-6',

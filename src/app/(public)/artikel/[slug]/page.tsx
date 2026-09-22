@@ -5,6 +5,8 @@ import { formatDate } from '@/lib/utils'
 import { cldUrl } from '@/lib/cld-url'
 import { prepareArticleHtml } from '@/lib/article-html'
 import ArticleContent from '@/components/shared/ArticleContent'
+import ShareArticle from '@/components/shared/ShareArticle'
+import { absoluteUrl } from '@/lib/site-url'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -42,6 +44,8 @@ export default async function ArtikelDetailPage({ params }: Props) {
   })
 
   if (!post) notFound()
+
+  const shareUrl = await absoluteUrl(`/artikel/${post.slug}`)
 
   // Fetch related articles
   const items = await prisma.post.findMany({
@@ -102,6 +106,12 @@ export default async function ArtikelDetailPage({ params }: Props) {
                break-words prose-a:break-all prose-pre:overflow-x-auto"
             style={{ fontFamily: 'Inter' }}
             html={prepareArticleHtml(post.content)}
+          />
+
+          <ShareArticle
+            url={shareUrl}
+            title={post.title}
+            image={post.coverImage ? cldUrl(post.coverImage, 'f_auto,q_auto,w_1200') : undefined}
           />
         </article>
 

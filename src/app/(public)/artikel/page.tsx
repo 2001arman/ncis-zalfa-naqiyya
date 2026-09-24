@@ -1,13 +1,52 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { cldUrl } from '@/lib/cld-url'
+import Pagination from '@/components/shared/Pagination'
 
-export const metadata: Metadata = { title: 'Artikel & Jurnal – Zalfa Naqiyya' }
 export const dynamic = 'force-dynamic'
 
-export default async function ArtikelPage() {
-  const items = await prisma.post.findMany({ where: { published: true }, orderBy: { createdAt: 'desc' }, take: 6 }).catch(() => [])
+/** Articles per page. Even number, so the two-column grid never ends ragged. */
+const PAGE_SIZE = 6
+
+interface Props {
+  searchParams: Promise<{ page?: string }>
+}
+
+function parsePage(raw?: string): number {
+  const page = Number(raw)
+  return Number.isInteger(page) && page > 1 ? page : 1
+}
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const page = parsePage((await searchParams).page)
+  return {
+    title:
+      page > 1
+        ? `Artikel & Jurnal – Halaman ${page} – Zalfa Naqiyya`
+        : 'Artikel & Jurnal – Zalfa Naqiyya',
+  }
+}
+
+export default async function ArtikelPage({ searchParams }: Props) {
+  const currentPage = parsePage((await searchParams).page)
+
+  const [total, items] = await Promise.all([
+    prisma.post.count({ where: { published: true } }).catch(() => 0),
+    prisma.post
+      .findMany({
+        where: { published: true },
+        orderBy: { createdAt: 'desc' },
+        skip: (currentPage - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+      })
+      .catch(() => []),
+  ])
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  // A page past the end is a dead URL, not the last page over again.
+  if (currentPage > totalPages) notFound()
 
   return (
     <div className="bg-[#f8faf6] text-[#191c1b] min-h-screen">
@@ -42,6 +81,13 @@ export default async function ArtikelPage() {
           ))}
         </section>
         )}
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath="/artikel"
+          label="Navigasi halaman artikel"
+        />
       </main>
     </div>
   )
